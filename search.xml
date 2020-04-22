@@ -1,6 +1,133 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>iwr1443insert_config</title>
+    <url>/2020/04/22/iwr1443insert-config/</url>
+    <content><![CDATA[<h3 id="IWR1443使用内置config文件"><a href="#IWR1443使用内置config文件" class="headerlink" title="IWR1443使用内置config文件"></a>IWR1443使用内置config文件</h3><h2 id="在-mmwave-cli-c中添加CLI的头文件"><a href="#在-mmwave-cli-c中添加CLI的头文件" class="headerlink" title="在 mmwave_cli.c中添加CLI的头文件"></a>在 mmwave_cli.c中添加CLI的头文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;ti&#x2F;utils&#x2F;cli&#x2F;include&#x2F;cli_internal.h&gt;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="在mmwave-cli-c中添加CLI的结构体"><a href="#在mmwave-cli-c中添加CLI的结构体" class="headerlink" title="在mmwave_cli.c中添加CLI的结构体"></a>在mmwave_cli.c中添加CLI的结构体</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">extern CLI_MCB      gCLI;</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="在main-c文件中添加相应的功能定义"><a href="#在main-c文件中添加相应的功能定义" class="headerlink" title="在main.c文件中添加相应的功能定义"></a>在main.c文件中添加相应的功能定义</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">extern void MmwDemo_Bypass_CLI (void);</span><br><span class="line"></span><br><span class="line">Call function in &quot;void MmwDemo_initTask(UArg arg0, UArg arg1)&quot; before return parameter in Main.c from SDK demo CCS project MSS section</span><br><span class="line"></span><br><span class="line">MmwDemo_Bypass_CLI();</span><br></pre></td></tr></table></figure>
+
+
+
+<h2 id="在mmwave-cli-c中添加配置信息"><a href="#在mmwave-cli-c中添加配置信息" class="headerlink" title="在mmwave_cli.c中添加配置信息"></a>在mmwave_cli.c中添加配置信息</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#define CLI_BYPASS 1</span><br><span class="line"></span><br><span class="line">\#define MAX_RADAR_CMD        24</span><br><span class="line"></span><br><span class="line">uint8_t* radarCmdString[MAX_RADAR_CMD] &#x3D;</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">   &#123;&quot;sensorStop \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;flushCfg \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;dfeDataOutputMode 1 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;channelCfg 15 7 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;adcCfg 2 1 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;adcbufCfg 0 1 0 1 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;profileCfg 0 77 7 7 57.14 0 0 70 1 240 4884 0 0 30 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;chirpCfg 0 0 0 0 0 0 0 1 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;chirpCfg 1 1 0 0 0 0 0 4 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;chirpCfg 2 2 0 0 0 0 0 2 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;frameCfg 0 2 16 0 33.333 1 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;lowPower 0 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;guiMonitor 1 0 0 0 0 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;cfarCfg 0 2 8 4 3 0 768 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;peakGrouping 1 0 1 1 229 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;multiObjBeamForming 1 0.5 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;clutterRemoval 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;calibDcRangeSig 0 -5 8 256 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;compRangeBiasAndRxChanPhase 0.0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 1 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;measureRangeBiasAndRxChanPhase 0 1.5 0.2 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;CQRxSatMonitor 0 3 5 123 0 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;CQSigImgMonitor 0 119 4 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;analogMonitor 1 1 \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">   &#123;&quot;sensorStart \r\n&quot;&#125;,</span><br><span class="line"></span><br><span class="line">&#125;;</span><br></pre></td></tr></table></figure>
+
+
+
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">​</span><br></pre></td></tr></table></figure>
+<p>static int32_t CLI_ByPassApi(CLI_Cfg* ptrCLICfg)</p>
+<p>{</p>
+<p>  //uint8_t cmdString[128];</p>
+<p>  char* tokenizedArgs[CLI_MAX_ARGS];</p>
+<p>  char* ptrCLICommand;</p>
+<p>  char delimitter[] = “ \r\n”;</p>
+<p>  uint32_t argIndex;</p>
+<p>  CLI_CmdTableEntry* ptrCLICommandEntry;</p>
+<p>  int32_t cliStatus;</p>
+<p>  uint32_t index, idx;</p>
+<p>  uint16_t numCLICommands = 0U;</p>
+<p>  /* Sanity Check: Validate the arguments */</p>
+<p>  if (ptrCLICfg == NULL)</p>
+<p>  return -1;</p>
+<p>​```</p>
+<p>​```<br>/* Cycle through and determine the number of supported CLI commands: */</p>
+<p>  for (index = 0; index &lt; CLI_MAX_CMD; index++)</p>
+<p>  {</p>
+<p>​    /* Do we have a valid entry? */</p>
+<p>​    if (ptrCLICfg-&gt;tableEntry[index].cmd == NULL)</p>
+<p>​    {</p>
+<p>​      /* NO: This is the last entry */</p>
+<p>​      break;</p>
+<p>​    }</p>
+<p>​    else</p>
+<p>​    {</p>
+<p>​      /* YES: Increment the number of CLI commands */</p>
+<p>​      numCLICommands = numCLICommands + 1;</p>
+<p>​    }</p>
+<p>  }</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>  /* Execute All Radar Commands */</p>
+<p>  for (idx = 0; idx &lt; MAX_RADAR_CMD; idx++)</p>
+<p>  {</p>
+<p>​    /* Reset all the tokenized arguments: */</p>
+<p>​    memset ((void *)&amp;tokenizedArgs, 0, sizeof(tokenizedArgs));</p>
+<p>​    argIndex = 0;</p>
+<p>​    ptrCLICommand = (char*)radarCmdString[idx];</p>
+<p>​    /* Set the CLI status: */</p>
+<p>​    cliStatus = -1;</p>
+<p>​    /* The command has been entered we now tokenize the command message */</p>
+<p>​    while (1)</p>
+<p>​    {</p>
+<p>​      /* Tokenize the arguments: */</p>
+<p>​      tokenizedArgs[argIndex] = strtok(ptrCLICommand, delimitter);</p>
+<p>​      if (tokenizedArgs[argIndex] == NULL)</p>
+<p>​        break;</p>
+<p>​      /* Increment the argument index: */</p>
+<p>​      argIndex++;</p>
+<p>​      if (argIndex &gt;= CLI_MAX_ARGS)</p>
+<p>​        break;</p>
+<p>​      /* Reset the command string */</p>
+<p>​      ptrCLICommand = NULL;</p>
+<p>​    }</p>
+<p>​    /* Were we able to tokenize the CLI command? */</p>
+<p>​    if (argIndex == 0)</p>
+<p>​      continue;</p>
+<p>​    /* Cycle through all the registered CLI commands: */</p>
+<p>​    for (index = 0; index &lt; numCLICommands; index++)</p>
+<p>​    {</p>
+<p>​      ptrCLICommandEntry = &amp;ptrCLICfg-&gt;tableEntry[index];</p>
+<p>​      /* Do we have a match? */</p>
+<p>​      if (strcmp(ptrCLICommandEntry-&gt;cmd, tokenizedArgs[0]) == 0)</p>
+<p>​      {</p>
+<p>​        /* YES: Pass this to the CLI registered function */</p>
+<p>​        cliStatus = ptrCLICommandEntry-&gt;cmdHandlerFxn (argIndex, tokenizedArgs);</p>
+<p>​        if (cliStatus == 0)</p>
+<p>​        {</p>
+<p>​          CLI_write (“Done\n”);</p>
+<p>​        }</p>
+<p>​        else</p>
+<p>​        {</p>
+<p>​          CLI_write (“Error %d\n”, cliStatus);</p>
+<p>​        }</p>
+<p>​        break;</p>
+<p>​      }</p>
+<p>​    }</p>
+<p>​    /* Did we get a matching CLI command? */</p>
+<p>​    if (index == numCLICommands)</p>
+<p>​    {</p>
+<p>​      /* NO matching command found. Is the mmWave extension enabled? */</p>
+<pre><code>if (ptrCLICfg-&gt;enableMMWaveExtension == 1U)</code></pre><p>​      {</p>
+<p>​        /* Yes: Pass this to the mmWave extension handler */</p>
+<p>​        cliStatus = CLI_MMWaveExtensionHandler (argIndex, tokenizedArgs);</p>
+<p>​      }</p>
+<p>​      /* Was the CLI command found? */</p>
+<p>​      if (cliStatus == -1)</p>
+<p>​      {</p>
+<p>​        /* No: The command was still not found */</p>
+<p>​        CLI_write (“‘%s’ is not recognized as a CLI command\n”, tokenizedArgs[0]);</p>
+<p>​      }</p>
+<p>​    }</p>
+<p>  }</p>
+<p>  return 0;</p>
+<p>}</p>
+<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
+<p>void MmwDemo_Bypass_CLI (void)</p>
+<p>{</p>
+<p>  if (CLI_ByPassApi(&amp;gCLI.cfg) != 0)</p>
+<p>  {</p>
+<p>​    System_printf (“Error: Unable to CLI_ByPassApi\n”);</p>
+<p>​    return;</p>
+<p>  }</p>
+<p>  return;</p>
+<p>}</p>
+<pre><code></code></pre>]]></content>
+  </entry>
+  <entry>
     <title>TI IWR1443使用内置配置文件</title>
     <url>/2020/04/22/article/</url>
     <content><![CDATA[<p>  /* Execute All Radar Commands */</p>
