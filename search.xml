@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>iwr1443insert_config</title>
+    <title>IWR1443使用内置config文件</title>
     <url>/2020/04/22/iwr1443insert-config/</url>
     <content><![CDATA[<h3 id="IWR1443使用内置config文件"><a href="#IWR1443使用内置config文件" class="headerlink" title="IWR1443使用内置config文件"></a>IWR1443使用内置config文件</h3><h2 id="在-mmwave-cli-c中添加CLI的头文件"><a href="#在-mmwave-cli-c中添加CLI的头文件" class="headerlink" title="在 mmwave_cli.c中添加CLI的头文件"></a>在 mmwave_cli.c中添加CLI的头文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;ti&#x2F;utils&#x2F;cli&#x2F;include&#x2F;cli_internal.h&gt;</span><br></pre></td></tr></table></figure>
 
@@ -126,6 +126,12 @@
 <p>  return;</p>
 <p>}</p>
 <pre><code></code></pre>]]></content>
+      <categories>
+        <category>毫米波雷达学习</category>
+      </categories>
+      <tags>
+        <tag>MmwaveRadar</tag>
+      </tags>
   </entry>
   <entry>
     <title>tags</title>
