@@ -28,7 +28,7 @@
 <meta property="og:description" content="IWR1443使用内置config文件在 mmwave_cli.c中添加CLI的头文件1#include &lt;ti&#x2F;utils&#x2F;cli&#x2F;include&#x2F;cli_internal.h&gt;    在mmwave_cli.c中添加CLI的结构体1extern CLI_MCB      gCLI;    在main.c文件中添加相应的功能定义12345ext">
 <meta property="og:locale" content="zh_CN">
 <meta property="article:published_time" content="2020-04-22T08:57:10.000Z">
-<meta property="article:modified_time" content="2020-04-22T09:10:01.609Z">
+<meta property="article:modified_time" content="2020-04-22T09:13:04.828Z">
 <meta property="article:author" content="可可">
 <meta property="article:tag" content="MmwaveRadar">
 <meta name="twitter:card" content="summary">
@@ -211,7 +211,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-22 16:57:10 / 修改时间：17:10:01" itemprop="dateCreated datePublished" datetime="2020-04-22T16:57:10+08:00">2020-04-22</time>
+              <time title="创建时间：2020-04-22 16:57:10 / 修改时间：17:13:04" itemprop="dateCreated datePublished" datetime="2020-04-22T16:57:10+08:00">2020-04-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -229,14 +229,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>4k</span>
+              <span>5.1k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>4 分钟</span>
+              <span>5 分钟</span>
             </span>
 
         </div>
@@ -265,112 +265,13 @@
 
 
 
-<p>​```<br>static int32_t CLI_ByPassApi(CLI_Cfg* ptrCLICfg)</p>
-<p>{</p>
-<p>  //uint8_t cmdString[128];</p>
-<p>  char* tokenizedArgs[CLI_MAX_ARGS];</p>
-<p>  char* ptrCLICommand;</p>
-<p>  char delimitter[] = “ \r\n”;</p>
-<p>  uint32_t argIndex;</p>
-<p>  CLI_CmdTableEntry* ptrCLICommandEntry;</p>
-<p>  int32_t cliStatus;</p>
-<p>  uint32_t index, idx;</p>
-<p>  uint16_t numCLICommands = 0U;</p>
-<p>  /* Sanity Check: Validate the arguments */</p>
-<p>  if (ptrCLICfg == NULL)</p>
-<p>  return -1;</p>
-<p>​```</p>
-<p>​```<br>/* Cycle through and determine the number of supported CLI commands: */</p>
-<p>  for (index = 0; index &lt; CLI_MAX_CMD; index++)</p>
-<p>  {</p>
-<p>​    /* Do we have a valid entry? */</p>
-<p>​    if (ptrCLICfg-&gt;tableEntry[index].cmd == NULL)</p>
-<p>​    {</p>
-<p>​      /* NO: This is the last entry */</p>
-<p>​      break;</p>
-<p>​    }</p>
-<p>​    else</p>
-<p>​    {</p>
-<p>​      /* YES: Increment the number of CLI commands */</p>
-<p>​      numCLICommands = numCLICommands + 1;</p>
-<p>​    }</p>
-<p>  }</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>  /* Execute All Radar Commands */</p>
-<p>  for (idx = 0; idx &lt; MAX_RADAR_CMD; idx++)</p>
-<p>  {</p>
-<p>​    /* Reset all the tokenized arguments: */</p>
-<p>​    memset ((void *)&amp;tokenizedArgs, 0, sizeof(tokenizedArgs));</p>
-<p>​    argIndex = 0;</p>
-<p>​    ptrCLICommand = (char*)radarCmdString[idx];</p>
-<p>​    /* Set the CLI status: */</p>
-<p>​    cliStatus = -1;</p>
-<p>​    /* The command has been entered we now tokenize the command message */</p>
-<p>​    while (1)</p>
-<p>​    {</p>
-<p>​      /* Tokenize the arguments: */</p>
-<p>​      tokenizedArgs[argIndex] = strtok(ptrCLICommand, delimitter);</p>
-<p>​      if (tokenizedArgs[argIndex] == NULL)</p>
-<p>​        break;</p>
-<p>​      /* Increment the argument index: */</p>
-<p>​      argIndex++;</p>
-<p>​      if (argIndex &gt;= CLI_MAX_ARGS)</p>
-<p>​        break;</p>
-<p>​      /* Reset the command string */</p>
-<p>​      ptrCLICommand = NULL;</p>
-<p>​    }</p>
-<p>​    /* Were we able to tokenize the CLI command? */</p>
-<p>​    if (argIndex == 0)</p>
-<p>​      continue;</p>
-<p>​    /* Cycle through all the registered CLI commands: */</p>
-<p>​    for (index = 0; index &lt; numCLICommands; index++)</p>
-<p>​    {</p>
-<p>​      ptrCLICommandEntry = &amp;ptrCLICfg-&gt;tableEntry[index];</p>
-<p>​      /* Do we have a match? */</p>
-<p>​      if (strcmp(ptrCLICommandEntry-&gt;cmd, tokenizedArgs[0]) == 0)</p>
-<p>​      {</p>
-<p>​        /* YES: Pass this to the CLI registered function */</p>
-<p>​        cliStatus = ptrCLICommandEntry-&gt;cmdHandlerFxn (argIndex, tokenizedArgs);</p>
-<p>​        if (cliStatus == 0)</p>
-<p>​        {</p>
-<p>​          CLI_write (“Done\n”);</p>
-<p>​        }</p>
-<p>​        else</p>
-<p>​        {</p>
-<p>​          CLI_write (“Error %d\n”, cliStatus);</p>
-<p>​        }</p>
-<p>​        break;</p>
-<p>​      }</p>
-<p>​    }</p>
-<p>​    /* Did we get a matching CLI command? */</p>
-<p>​    if (index == numCLICommands)</p>
-<p>​    {</p>
-<p>​      /* NO matching command found. Is the mmWave extension enabled? */</p>
-<pre><code>if (ptrCLICfg-&gt;enableMMWaveExtension == 1U)</code></pre><p>​      {</p>
-<p>​        /* Yes: Pass this to the mmWave extension handler */</p>
-<p>​        cliStatus = CLI_MMWaveExtensionHandler (argIndex, tokenizedArgs);</p>
-<p>​      }</p>
-<p>​      /* Was the CLI command found? */</p>
-<p>​      if (cliStatus == -1)</p>
-<p>​      {</p>
-<p>​        /* No: The command was still not found */</p>
-<p>​        CLI_write (“‘%s’ is not recognized as a CLI command\n”, tokenizedArgs[0]);</p>
-<p>​      }</p>
-<p>​    }</p>
-<p>  }</p>
-<p>  return 0;</p>
-<p>}</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line"></span><br></pre></td></tr></table></figure>
-<p>void MmwDemo_Bypass_CLI (void)</p>
-<p>{</p>
-<p>  if (CLI_ByPassApi(&amp;gCLI.cfg) != 0)</p>
-<p>  {</p>
-<p>​    System_printf (“Error: Unable to CLI_ByPassApi\n”);</p>
-<p>​    return;</p>
-<p>  }</p>
-<p>  return;</p>
-<p>}</p>
-<pre><code></code></pre>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">static int32_t CLI_ByPassApi(CLI_Cfg* ptrCLICfg)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F;uint8_t cmdString[128];</span><br><span class="line"></span><br><span class="line">  char* tokenizedArgs[CLI_MAX_ARGS];</span><br><span class="line"></span><br><span class="line">  char* ptrCLICommand;</span><br><span class="line"></span><br><span class="line">  char delimitter[] &#x3D; &quot; \r\n&quot;;</span><br><span class="line"></span><br><span class="line">  uint32_t argIndex;</span><br><span class="line"></span><br><span class="line">  CLI_CmdTableEntry* ptrCLICommandEntry;</span><br><span class="line"></span><br><span class="line">  int32_t cliStatus;</span><br><span class="line"></span><br><span class="line">  uint32_t index, idx;</span><br><span class="line"></span><br><span class="line">  uint16_t numCLICommands &#x3D; 0U;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  &#x2F;* Sanity Check: Validate the arguments *&#x2F;</span><br><span class="line"></span><br><span class="line">  if (ptrCLICfg &#x3D;&#x3D; NULL)</span><br><span class="line"></span><br><span class="line">  return -1;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;* Cycle through and determine the number of supported CLI commands: *&#x2F;</span><br><span class="line"></span><br><span class="line">  for (index &#x3D; 0; index &lt; CLI_MAX_CMD; index++)</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line"></span><br><span class="line">​    &#x2F;* Do we have a valid entry? *&#x2F;</span><br><span class="line"></span><br><span class="line">​    if (ptrCLICfg-&gt;tableEntry[index].cmd &#x3D;&#x3D; NULL)</span><br><span class="line"></span><br><span class="line">​    &#123;</span><br><span class="line"></span><br><span class="line">​      &#x2F;* NO: This is the last entry *&#x2F;</span><br><span class="line"></span><br><span class="line">​      break;</span><br><span class="line"></span><br><span class="line">​    &#125;</span><br><span class="line"></span><br><span class="line">​    else</span><br><span class="line"></span><br><span class="line">​    &#123;</span><br><span class="line"></span><br><span class="line">​      &#x2F;* YES: Increment the number of CLI commands *&#x2F;</span><br><span class="line"></span><br><span class="line">​      numCLICommands &#x3D; numCLICommands + 1;</span><br><span class="line"></span><br><span class="line">​    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br><span class="line">103</span><br><span class="line">104</span><br><span class="line">105</span><br><span class="line">106</span><br><span class="line">107</span><br><span class="line">108</span><br><span class="line">109</span><br><span class="line">110</span><br><span class="line">111</span><br><span class="line">112</span><br><span class="line">113</span><br><span class="line">114</span><br><span class="line">115</span><br><span class="line">116</span><br><span class="line">117</span><br><span class="line">118</span><br><span class="line">119</span><br><span class="line">120</span><br><span class="line">121</span><br><span class="line">122</span><br><span class="line">123</span><br><span class="line">124</span><br><span class="line">125</span><br><span class="line">126</span><br><span class="line">127</span><br><span class="line">128</span><br><span class="line">129</span><br><span class="line">130</span><br><span class="line">131</span><br><span class="line">132</span><br><span class="line">133</span><br><span class="line">134</span><br><span class="line">135</span><br><span class="line">136</span><br><span class="line">137</span><br><span class="line">138</span><br><span class="line">139</span><br><span class="line">140</span><br><span class="line">141</span><br><span class="line">142</span><br><span class="line">143</span><br><span class="line">144</span><br><span class="line">145</span><br><span class="line">146</span><br><span class="line">147</span><br><span class="line">148</span><br><span class="line">149</span><br></pre></td><td class="code"><pre><span class="line">  &#x2F;* Execute All Radar Commands *&#x2F;</span><br><span class="line"></span><br><span class="line">  for (idx &#x3D; 0; idx &lt; MAX_RADAR_CMD; idx++)</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line"></span><br><span class="line">​    &#x2F;* Reset all the tokenized arguments: *&#x2F;</span><br><span class="line"></span><br><span class="line">​    memset ((void *)&amp;tokenizedArgs, 0, sizeof(tokenizedArgs));</span><br><span class="line"></span><br><span class="line">​    argIndex &#x3D; 0;</span><br><span class="line"></span><br><span class="line">​    ptrCLICommand &#x3D; (char*)radarCmdString[idx];</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​    &#x2F;* Set the CLI status: *&#x2F;</span><br><span class="line"></span><br><span class="line">​    cliStatus &#x3D; -1;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​    &#x2F;* The command has been entered we now tokenize the command message *&#x2F;</span><br><span class="line"></span><br><span class="line">​    while (1)</span><br><span class="line"></span><br><span class="line">​    &#123;</span><br><span class="line"></span><br><span class="line">​      &#x2F;* Tokenize the arguments: *&#x2F;</span><br><span class="line"></span><br><span class="line">​      tokenizedArgs[argIndex] &#x3D; strtok(ptrCLICommand, delimitter);</span><br><span class="line"></span><br><span class="line">​      if (tokenizedArgs[argIndex] &#x3D;&#x3D; NULL)</span><br><span class="line"></span><br><span class="line">​        break;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​      &#x2F;* Increment the argument index: *&#x2F;</span><br><span class="line"></span><br><span class="line">​      argIndex++;</span><br><span class="line"></span><br><span class="line">​      if (argIndex &gt;&#x3D; CLI_MAX_ARGS)</span><br><span class="line"></span><br><span class="line">​        break;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​      &#x2F;* Reset the command string *&#x2F;</span><br><span class="line"></span><br><span class="line">​      ptrCLICommand &#x3D; NULL;</span><br><span class="line"></span><br><span class="line">​    &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​    &#x2F;* Were we able to tokenize the CLI command? *&#x2F;</span><br><span class="line"></span><br><span class="line">​    if (argIndex &#x3D;&#x3D; 0)</span><br><span class="line"></span><br><span class="line">​      continue;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​    &#x2F;* Cycle through all the registered CLI commands: *&#x2F;</span><br><span class="line"></span><br><span class="line">​    for (index &#x3D; 0; index &lt; numCLICommands; index++)</span><br><span class="line"></span><br><span class="line">​    &#123;</span><br><span class="line"></span><br><span class="line">​      ptrCLICommandEntry &#x3D; &amp;ptrCLICfg-&gt;tableEntry[index];</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​      &#x2F;* Do we have a match? *&#x2F;</span><br><span class="line"></span><br><span class="line">​      if (strcmp(ptrCLICommandEntry-&gt;cmd, tokenizedArgs[0]) &#x3D;&#x3D; 0)</span><br><span class="line"></span><br><span class="line">​      &#123;</span><br><span class="line"></span><br><span class="line">​        &#x2F;* YES: Pass this to the CLI registered function *&#x2F;</span><br><span class="line"></span><br><span class="line">​        cliStatus &#x3D; ptrCLICommandEntry-&gt;cmdHandlerFxn (argIndex, tokenizedArgs);</span><br><span class="line"></span><br><span class="line">​        if (cliStatus &#x3D;&#x3D; 0)</span><br><span class="line"></span><br><span class="line">​        &#123;</span><br><span class="line"></span><br><span class="line">​          CLI_write (&quot;Done\n&quot;);</span><br><span class="line"></span><br><span class="line">​        &#125;</span><br><span class="line"></span><br><span class="line">​        else</span><br><span class="line"></span><br><span class="line">​        &#123;</span><br><span class="line"></span><br><span class="line">​          CLI_write (&quot;Error %d\n&quot;, cliStatus);</span><br><span class="line"></span><br><span class="line">​        &#125;</span><br><span class="line"></span><br><span class="line">​        break;</span><br><span class="line"></span><br><span class="line">​      &#125;</span><br><span class="line"></span><br><span class="line">​    &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​    &#x2F;* Did we get a matching CLI command? *&#x2F;</span><br><span class="line"></span><br><span class="line">​    if (index &#x3D;&#x3D; numCLICommands)</span><br><span class="line"></span><br><span class="line">​    &#123;</span><br><span class="line"></span><br><span class="line">​      &#x2F;* NO matching command found. Is the mmWave extension enabled? *&#x2F;</span><br><span class="line"></span><br><span class="line">      if (ptrCLICfg-&gt;enableMMWaveExtension &#x3D;&#x3D; 1U)</span><br><span class="line"></span><br><span class="line">​      &#123;</span><br><span class="line"></span><br><span class="line">​        &#x2F;* Yes: Pass this to the mmWave extension handler *&#x2F;</span><br><span class="line"></span><br><span class="line">​        cliStatus &#x3D; CLI_MMWaveExtensionHandler (argIndex, tokenizedArgs);</span><br><span class="line"></span><br><span class="line">​      &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">​      &#x2F;* Was the CLI command found? *&#x2F;</span><br><span class="line"></span><br><span class="line">​      if (cliStatus &#x3D;&#x3D; -1)</span><br><span class="line"></span><br><span class="line">​      &#123;</span><br><span class="line"></span><br><span class="line">​        &#x2F;* No: The command was still not found *&#x2F;</span><br><span class="line"></span><br><span class="line">​        CLI_write (&quot;&#39;%s&#39; is not recognized as a CLI command\n&quot;, tokenizedArgs[0]);</span><br><span class="line"></span><br><span class="line">​      &#125;</span><br><span class="line"></span><br><span class="line">​    &#125;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line"> </span><br><span class="line"></span><br><span class="line">  return 0;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line">void MmwDemo_Bypass_CLI (void)</span><br><span class="line"></span><br><span class="line">&#123;</span><br><span class="line"></span><br><span class="line">  if (CLI_ByPassApi(&amp;gCLI.cfg) !&#x3D; 0)</span><br><span class="line"></span><br><span class="line">  &#123;</span><br><span class="line"></span><br><span class="line">​    System_printf (&quot;Error: Unable to CLI_ByPassApi\n&quot;);</span><br><span class="line"></span><br><span class="line">​    return;</span><br><span class="line"></span><br><span class="line">  &#125;</span><br><span class="line"></span><br><span class="line">  return;</span><br><span class="line"></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
     </div>
 
     
@@ -515,12 +416,12 @@
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">4k</span>
+    <span title="站点总字数">5k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">4 分钟</span>
+    <span title="站点阅读时长">5 分钟</span>
 </div>
 
         
