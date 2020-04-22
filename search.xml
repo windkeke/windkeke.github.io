@@ -3,7 +3,7 @@
   <entry>
     <title>IWR1443使用内置config文件</title>
     <url>/2020/04/22/iwr1443insert-config/</url>
-    <content><![CDATA[<h3 id="IWR1443使用内置config文件"><a href="#IWR1443使用内置config文件" class="headerlink" title="IWR1443使用内置config文件"></a>IWR1443使用内置config文件</h3><h2 id="在-mmwave-cli-c中添加CLI的头文件"><a href="#在-mmwave-cli-c中添加CLI的头文件" class="headerlink" title="在 mmwave_cli.c中添加CLI的头文件"></a>在 mmwave_cli.c中添加CLI的头文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;ti&#x2F;utils&#x2F;cli&#x2F;include&#x2F;cli_internal.h&gt;</span><br></pre></td></tr></table></figure>
+    <content><![CDATA[<h1 id="IWR1443使用内置config文件"><a href="#IWR1443使用内置config文件" class="headerlink" title="IWR1443使用内置config文件"></a>IWR1443使用内置config文件</h1><h2 id="在-mmwave-cli-c中添加CLI的头文件"><a href="#在-mmwave-cli-c中添加CLI的头文件" class="headerlink" title="在 mmwave_cli.c中添加CLI的头文件"></a>在 mmwave_cli.c中添加CLI的头文件</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">#include &lt;ti&#x2F;utils&#x2F;cli&#x2F;include&#x2F;cli_internal.h&gt;</span><br></pre></td></tr></table></figure>
 
 
 
@@ -11,7 +11,9 @@
 
 
 
-<h2 id="在main-c文件中添加相应的功能定义"><a href="#在main-c文件中添加相应的功能定义" class="headerlink" title="在main.c文件中添加相应的功能定义"></a>在main.c文件中添加相应的功能定义</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">extern void MmwDemo_Bypass_CLI (void);</span><br><span class="line"></span><br><span class="line">Call function in &quot;void MmwDemo_initTask(UArg arg0, UArg arg1)&quot; before return parameter in Main.c from SDK demo CCS project MSS section</span><br><span class="line"></span><br><span class="line">MmwDemo_Bypass_CLI();</span><br></pre></td></tr></table></figure>
+<h2 id="在main-c文件中添加相应的功能定义"><a href="#在main-c文件中添加相应的功能定义" class="headerlink" title="在main.c文件中添加相应的功能定义"></a>在main.c文件中添加相应的功能定义</h2><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">extern void MmwDemo_Bypass_CLI (void);</span><br></pre></td></tr></table></figure>
+
+<h3 id="Call-function-in-“void-MmwDemo-initTask-UArg-arg0-UArg-arg1-”-before-return-parameter-in-Main-c-from-SDK-demo-CCS-project-MSS-section"><a href="#Call-function-in-“void-MmwDemo-initTask-UArg-arg0-UArg-arg1-”-before-return-parameter-in-Main-c-from-SDK-demo-CCS-project-MSS-section" class="headerlink" title="Call function in “void MmwDemo_initTask(UArg arg0, UArg arg1)” before return parameter in Main.c from SDK demo CCS project MSS section"></a>Call function in “void MmwDemo_initTask(UArg arg0, UArg arg1)” before return parameter in Main.c from SDK demo CCS project MSS section</h3><figure class="highlight plain"><table><tr><td class="code"><pre><span class="line">MmwDemo_Bypass_CLI();</span><br></pre></td></tr></table></figure>
 
 
 
