@@ -19,8 +19,8 @@
 
 
 
-<figure class="highlight plain"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line"></span><br><span class="line">​</span><br></pre></td></tr></table></figure>
-<p>static int32_t CLI_ByPassApi(CLI_Cfg* ptrCLICfg)</p>
+
+<p>​```<br>static int32_t CLI_ByPassApi(CLI_Cfg* ptrCLICfg)</p>
 <p>{</p>
 <p>  //uint8_t cmdString[128];</p>
 <p>  char* tokenizedArgs[CLI_MAX_ARGS];</p>
