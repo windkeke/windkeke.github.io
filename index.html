@@ -378,227 +378,6 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://windkeke.github.io/2020/04/22/article/">
-
-    <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
-      <meta itemprop="image" content="/images/avatar.jpg">
-      <meta itemprop="name" content="可可">
-      <meta itemprop="description" content="学习心得与技术文章">
-    </span>
-
-    <span hidden itemprop="publisher" itemscope itemtype="http://schema.org/Organization">
-      <meta itemprop="name" content="可可的部落阁">
-    </span>
-      <header class="post-header">
-        <h1 class="post-title" itemprop="name headline">
-          
-            <a href="/2020/04/22/article/" class="post-title-link" itemprop="url">TI IWR1443使用内置配置文件</a>
-        </h1>
-
-        <div class="post-meta">
-            <span class="post-meta-item">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-calendar-o"></i>
-              </span>
-              <span class="post-meta-item-text">发表于</span>
-              
-
-              <time title="创建时间：2020-04-22 16:44:47 / 修改时间：16:50:23" itemprop="dateCreated datePublished" datetime="2020-04-22T16:44:47+08:00">2020-04-22</time>
-            </span>
-
-          <br>
-            <span class="post-meta-item" title="本文字数">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-file-word-o"></i>
-              </span>
-                <span class="post-meta-item-text">本文字数：</span>
-              <span>1.5k</span>
-            </span>
-            <span class="post-meta-item" title="阅读时长">
-              <span class="post-meta-item-icon">
-                <i class="fa fa-clock-o"></i>
-              </span>
-                <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
-            </span>
-
-        </div>
-      </header>
-
-    
-    
-    
-    <div class="post-body" itemprop="articleBody">
-
-      
-          <p>  /* Execute All Radar Commands */</p>
-<p>  for (idx = 0; idx &lt; MAX_RADAR_CMD; idx++)</p>
-<p>  {</p>
-<pre><code>/* Reset all the tokenized arguments: */
-
-memset ((void *)&amp;tokenizedArgs, 0, sizeof(tokenizedArgs));
-
-argIndex = 0;
-
-ptrCLICommand = (char*)radarCmdString[idx];
-
-
-
-
-/* Set the CLI status: */
-
-cliStatus = -1;
-
-
-
-
-/* The command has been entered we now tokenize the command message */
-
-while (1)
-
-{
-
-  /* Tokenize the arguments: */
-
-  tokenizedArgs[argIndex] = strtok(ptrCLICommand, delimitter);
-
-  if (tokenizedArgs[argIndex] == NULL)
-
-    break;
-
-
-
-
-  /* Increment the argument index: */
-
-  argIndex++;
-
-  if (argIndex &gt;= CLI_MAX_ARGS)
-
-    break;
-
-
-
-
-  /* Reset the command string */
-
-  ptrCLICommand = NULL;
-
-}
-
-
-
-
-/* Were we able to tokenize the CLI command? */
-
-if (argIndex == 0)
-
-  continue;
-
-
-
-
-/* Cycle through all the registered CLI commands: */
-
-for (index = 0; index &lt; numCLICommands; index++)
-
-{
-
-  ptrCLICommandEntry = &amp;ptrCLICfg-&gt;tableEntry[index];
-
-
-
-
-  /* Do we have a match? */
-
-  if (strcmp(ptrCLICommandEntry-&gt;cmd, tokenizedArgs[0]) == 0)
-
-  {
-
-    /* YES: Pass this to the CLI registered function */
-
-    cliStatus = ptrCLICommandEntry-&gt;cmdHandlerFxn (argIndex, tokenizedArgs);
-
-    if (cliStatus == 0)
-
-    {
-
-      CLI_write (&quot;Done\n&quot;);
-
-    }
-
-    else
-
-    {
-
-      CLI_write (&quot;Error %d\n&quot;, cliStatus);
-
-    }
-
-    break;
-
-  }
-
-}
-
-
-
-
-/* Did we get a matching CLI command? */
-
-if (index == numCLICommands)
-
-{
-
-  /* NO matching command found. Is the mmWave extension enabled? */
-
-  if (ptrCLICfg-&gt;enableMMWaveExtension == 1U)
-
-  {
-
-    /* Yes: Pass this to the mmWave extension handler */
-
-    cliStatus = CLI_MMWaveExtensionHandler (argIndex, tokenizedArgs);
-
-  }
-
-
-
-
-  /* Was the CLI command found? */
-
-  if (cliStatus == -1)
-
-  {
-
-    /* No: The command was still not found */
-
-    CLI_write (&quot;&apos;%s&apos; is not recognized as a CLI command\n&quot;, tokenizedArgs[0]);
-
-  }
-
-}</code></pre><p>  }</p>
-<p>  return 0;</p>
-<p>}</p>
-
-      
-    </div>
-
-    
-    
-    
-      <footer class="post-footer">
-        <div class="post-eof"></div>
-      </footer>
-  </article>
-  
-  
-  
-
-        
-  
-  
-  <article itemscope itemtype="http://schema.org/Article" class="post-block home" lang="zh-CN">
     <link itemprop="mainEntityOfPage" href="http://windkeke.github.io/2020/03/30/tags/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
@@ -819,13 +598,9 @@ if (index == numCLICommands)
       <div class="site-state-item site-state-posts">
           <a href="/archives/">
         
-          <span class="site-state-item-count">4</span>
+          <span class="site-state-item-count">3</span>
           <span class="site-state-item-name">日志</span>
         </a>
-      </div>
-      <div class="site-state-item site-state-tags">
-        <span class="site-state-item-count">1</span>
-        <span class="site-state-item-name">标签</span>
       </div>
   </nav>
 </div>
@@ -863,12 +638,12 @@ if (index == numCLICommands)
     <span class="post-meta-item-icon">
       <i class="fa fa-area-chart"></i>
     </span>
-    <span title="站点总字数">6k</span>
+    <span title="站点总字数">4k</span>
     <span class="post-meta-divider">|</span>
     <span class="post-meta-item-icon">
       <i class="fa fa-coffee"></i>
     </span>
-    <span title="站点阅读时长">5 分钟</span>
+    <span title="站点阅读时长">4 分钟</span>
 </div>
 
         
