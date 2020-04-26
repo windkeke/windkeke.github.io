@@ -1,57 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
-    <title>TI-RTOS学习笔记1</title>
-    <url>/2020/04/26/RTOS-study-notes1/</url>
-    <content><![CDATA[<h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="RTOS调度机制"><a href="#RTOS调度机制" class="headerlink" title="RTOS调度机制"></a>RTOS调度机制</h2><h3 id="Separate-Process-from-ISR"><a href="#Separate-Process-from-ISR" class="headerlink" title="Separate Process from ISR"></a>Separate Process from ISR</h3><ul>
-<li><p>将处理过程从中断程序中剥离出来</p>
-<p><strong>为什么这么做？</strong></p>
-<ul>
-<li><p>死循环：占用大量硬件资源</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153331676.png" alt="image-20200424153331676"></p>
-</li>
-<li><p>基于计时器的中断：会导致中断的遗漏</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153600953.png" alt="image-20200424153537897"></p>
-</li>
-<li><p>使用嵌套中断：多中断情况下难以宏观调配</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153537897.png" alt="image-20200424153600953"></p>
-</li>
-<li><p>将中断响应与处理过程分离</p>
-</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424152208657.png" alt="image-20200424152208657"></p>
-<p>将中断响应与中断处理程序分离之后，用户可以通过function的优先级来完成控制，接下来将要执行的功能完全取决于用户为其所设置的优先级。</p>
-<h3 id="BIOS调度机制"><a href="#BIOS调度机制" class="headerlink" title="BIOS调度机制"></a>BIOS调度机制</h3><p>三种事件类型</p>
-<ul>
-<li>Hwi 硬件中断 优先级最高</li>
-<li>Swi 软件中断 优先级次之</li>
-<li>Idle 闲置事件 优先级最低</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424150844713.png" alt="image-20200424150844713"></p>
-<ul>
-<li>在多Hwi（Swi）任务中，可以将同类型的事件进一步划定优先级（如优先级10的事件优先于优先级1的事件执行）。Idle类型事件内部不再划分优先级区别。</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424151320042.png" alt="image-20200424151320042"></p>
-<h3 id="The-Scheduler-–-in-Action"><a href="#The-Scheduler-–-in-Action" class="headerlink" title="The Scheduler – in Action"></a>The Scheduler – in Action</h3><p>​    程序总是从main()函数的开始执行最终也结束于main()的结尾，调用BIOS_start函数。这个函数启动了BIOS 任务调度。这时没有在运行的任务，所以BIOS总是处于最低的优先级属于Idle类事件。如果有函数在Idle线程里，它们会被调用。这与main()函数中在while()循环以外的函数类似， 都是在等待‘事件’的发生（如：中断）。</p>
-<p>​    随着时间流逝，Hwi1中断被触发，Hwi1运行并且触发 Swi2，而BIOS总是运行优先级最高的线程，所以等待Hwi1执行，此时Swi2处于Ready状态。（软件中断三种状态：Ready；Running；Inactive）。</p>
-<p>​    当Swi2运行中会触发Hwi2，此时Swi2会被Hwi2抢占，CPU执行Hwi2中的post3内容，当Hwi2执行完毕后此时有两个线程处于Ready状态-Swi2与Swi3.在BIOS中，数字越大，优先级越高。所以Swi3会执行并触发Swi1。Swi1变为Ready状态，Swi3仍在执行。</p>
-<p>当Swi3执行完毕后，两个进程处于Ready状态，先执行Swi2，然后Swi1。Swi1执行完毕后，系统除了Idle任务外没有其他线程。Idle一直处于等待运行的状态，所以接下来Idle运行，最后程序结束。</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424163115377.png" alt="image-20200424160918210"></p>
-<h3 id="Adding-Tasks"><a href="#Adding-Tasks" class="headerlink" title="Adding Tasks"></a>Adding Tasks</h3><p>任务：任务意味着可以与其他的任务同时运行，就像运行在while循环里一样一直处于运行状态。产生的数据存放在自己私有的空间里，而且当他们被抢占时，他们进入阻塞或暂停状态，等待一个信号（semaphore）去解除阻塞让其继续运行。</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424160918210.png" alt="image-20200424162638728"></p>
-<ul>
-<li>每个Task都有其自己专属的栈空间用于存储其离开的时的数据，这使得Task可以进行阻塞与暂停操作。这点与Hwi和Swi有非常大的不同，后两者使用的数据存在系统共有栈空间内。</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424162638728.png" alt="image-20200424163115377"></p>
-<h3 id="TI-RTOS-Kernel-Services-–-Summary"><a href="#TI-RTOS-Kernel-Services-–-Summary" class="headerlink" title="TI-RTOS Kernel Services – Summary"></a>TI-RTOS Kernel Services – Summary</h3><p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424164144448.png" alt="image-20200424164144448"></p>
-]]></content>
-      <categories>
-        <category>TI-RTOS学习笔记</category>
-      </categories>
-  </entry>
-  <entry>
     <title>IWR1443使用内置config文件</title>
     <url>/2020/04/22/iwr1443insert-config/</url>
     <content><![CDATA[<p>TI为推出的IWR1443毫米波雷达评估板提供了丰富可用的演示demo，这些都需要上电之后下载配置文件，这里经过修改可以将配置文件固化在固件中，使得评估板上电即开始工作。</p>
