@@ -209,7 +209,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-26 09:15:31 / 修改时间：09:50:34" itemprop="dateCreated datePublished" datetime="2020-04-26T09:15:31+08:00">2020-04-26</time>
+              <time title="创建时间：2020-04-26 09:15:31 / 修改时间：09:58:34" itemprop="dateCreated datePublished" datetime="2020-04-26T09:15:31+08:00">2020-04-26</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -246,10 +246,17 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>TI-RTOS学习笔记之任务调度</p>
+          <h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="RTOS调度机制"><a href="#RTOS调度机制" class="headerlink" title="RTOS调度机制"></a>RTOS调度机制</h2><h3 id="Separate-Process-from-ISR"><a href="#Separate-Process-from-ISR" class="headerlink" title="Separate Process from ISR"></a>Separate Process from ISR</h3><ul>
+<li><p>将处理过程从中断程序中剥离出来</p>
+<p><strong>为什么这么做？</strong></p>
+<ul>
+<li><p>死循环：占用大量硬件资源</p>
+<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153331676.png" alt="image-20200424153331676"></p>
+</li>
+<li><p>基于计时器的中断：会导致中断的遗漏</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/04/26/RTOS-study-notes1/">
+              <a class="btn" href="/2020/04/26/RTOS-study-notes1/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
@@ -304,7 +311,7 @@
                   <i class="fa fa-calendar-check-o"></i>
                 </span>
                 <span class="post-meta-item-text">更新于</span>
-                <time title="修改时间：2020-04-26 09:51:55" itemprop="dateModified" datetime="2020-04-26T09:51:55+08:00">2020-04-26</time>
+                <time title="修改时间：2020-04-26 09:58:50" itemprop="dateModified" datetime="2020-04-26T09:58:50+08:00">2020-04-26</time>
               </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -341,10 +348,14 @@
     <div class="post-body" itemprop="articleBody">
 
       
-          <p>TI-毫米波雷达将配置文件内置</p>
+          <p>TI为推出的IWR1443毫米波雷达评估板提供了丰富可用的演示demo，这些都需要上电之后下载配置文件，这里经过修改可以将配置文件固化在固件中，使得评估板上电即开始工作。</p>
+<ul>
+<li><p>不过需要注意的是评估板的芯片版本必须与SDK的版本一致，否则会出现无法下载固件，CCS编译错误等问题。</p>
+<p>我目前手头的IWR1443对应的SDK版本为mmwave_sdk_02_01_00_04</p>
+<p>对应的demo工具箱版本号为mmwave_industrial_toolbox_3_6_1</p>
           <!--noindex-->
             <div class="post-button">
-              <a class="btn" href="/2020/04/22/iwr1443insert-config/">
+              <a class="btn" href="/2020/04/22/iwr1443insert-config/#more" rel="contents">
                 阅读全文 &raquo;
               </a>
             </div>
