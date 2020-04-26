@@ -58,6 +58,23 @@
       </tags>
   </entry>
   <entry>
+    <title>TI-RTOS学习笔记2</title>
+    <url>/2020/04/26/RTOS-study-notes2/</url>
+    <content><![CDATA[<h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="TI-RTOS-Environment"><a href="#TI-RTOS-Environment" class="headerlink" title="TI-RTOS Environment"></a>TI-RTOS Environment</h2><h3 id="Kernel-APIs-Objects-and-Handles"><a href="#Kernel-APIs-Objects-and-Handles" class="headerlink" title="Kernel APIs, Objects and Handles"></a>Kernel APIs, Objects and Handles</h3><ul>
+<li>在代码中，当Swi_post()被调用后，BIOS Scheduler运行然后从Swi对象中抓取它的优先级。然后依据优先级将Swi安排在Swi queue中。当Swi在queue的头部时其准备运行，BIOS将会调用Swi对象(或者称为结构体)中的函数，在这个例子里是Audio_fxn。</li>
+</ul>
+<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424170045248.png" alt="image-20200424164609777"></p>
+<a id="more"></a>
+<h3 id="Thread-Object-Creation-in-BIOS"><a href="#Thread-Object-Creation-in-BIOS" class="headerlink" title="Thread (Object) Creation in BIOS"></a>Thread (Object) Creation in BIOS</h3><p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424164609777.png" alt="image-20200424170045248"></p>
+]]></content>
+      <categories>
+        <category>TI-RTOS学习笔记</category>
+      </categories>
+      <tags>
+        <tag>TI-RTOS</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>IWR1443使用内置config文件</title>
     <url>/2020/04/22/iwr1443insert-config/</url>
     <content><![CDATA[<p>TI为推出的IWR1443毫米波雷达评估板提供了丰富可用的演示demo，这些都需要上电之后下载配置文件，这里经过修改可以将配置文件固化在固件中，使得评估板上电即开始工作。</p>
