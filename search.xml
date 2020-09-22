@@ -85,10 +85,10 @@
 <p><img src="https://pic4.zhimg.com/v2-32b046b882950eac20eda2c502f4e005_b.jpg" alt="img"></p>
 <h2 id="四、小结"><a href="#四、小结" class="headerlink" title="四、小结"></a><strong>四、小结</strong></h2><p>卡尔曼滤波作为一种状态最优估计算法，与《现代控制系统》中的<strong>观测器设计</strong>思维类似，都是利用观测量并结合系统的模型来对系统的状态进行估计。但二者又有不同，由前面的介绍可知卡尔曼滤波的目的是利用卡尔曼增益来修正状态预测值，而观测器设计的目的是当系统的有些状态信息无法有效获取或不易测得时，通过状态重构，以便实现反馈控制。</p>
 <p>参考文献</p>
-<p>[1] <a href="https://link.zhihu.com/?target=https%3A//www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf">An Introduction to the Kalman Filter - UNC Computer Science</a></p>
-<p>[2] <a href="https://link.zhihu.com/?target=https%3A//www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/">How a Kalman filter works, in pictures</a></p>
-<p>[3] <a href="https://link.zhihu.com/?target=https%3A//towardsdatascience.com/kalman-filter-interview-bdc39f3e6cf3">Harveen Singh, Kalman Filter Interview</a></p>
-<p>[4] <a href="https://link.zhihu.com/?target=http%3A//web.mit.edu/kirtley/kirtley/binlustuff/literature/control/Kalman%20filter.pdf">Tutorial: The Kalman Filter, MIT</a></p>
+<p>[1] <a href="www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf">An Introduction to the Kalman Filter - UNC Computer Science</a></p>
+<p>[2] <a href="https://www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/" target="_blank" rel="noopener">How a Kalman filter works, in pictures</a></p>
+<p>[3] <a href="https://towardsdatascience.com/kalman-filter-interview-bdc39f3e6cf3" target="_blank" rel="noopener">Harveen Singh, Kalman Filter Interview</a></p>
+<p>[4] <a href="web.mit.edu/kirtley/kirtley/binlustuff/literature/control/Kalman%20filter.pdf">Tutorial: The Kalman Filter, MIT</a></p>
 ]]></content>
       <categories>
         <category>雷达处理算法</category>
