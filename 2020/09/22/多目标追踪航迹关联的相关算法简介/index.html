@@ -20,31 +20,28 @@
     var CONFIG = {"hostname":"windkeke.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="TI-RTOS学习笔记RTOS调度机制Separate Process from ISR 将处理过程从中断程序中剥离出来 为什么这么做？  死循环：占用大量硬件资源      基于计时器的中断：会导致中断的遗漏">
+  <meta name="description" content="多目标追踪航迹关联的相关算法简介一、最近邻法（Nearst Neighbors, NN)  用上图可以简单的概括出NN的过程：  记录之前的若干个航迹，如上图所示为2个。 在下一个测量值出现时刻前，每个航迹估计出其对应的预测值。 将测量报告（即观测值）与每个航迹的预测值之间的欧氏距离进行比较，最小的结果即将此观测值关联到对应航迹中。">
 <meta property="og:type" content="article">
-<meta property="og:title" content="TI-RTOS学习笔记1">
-<meta property="og:url" content="http://windkeke.github.io/2020/04/26/RTOS-study-notes1/index.html">
+<meta property="og:title" content="多目标追踪航迹关联的相关算法简介">
+<meta property="og:url" content="http://windkeke.github.io/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/index.html">
 <meta property="og:site_name" content="可可的部落阁">
-<meta property="og:description" content="TI-RTOS学习笔记RTOS调度机制Separate Process from ISR 将处理过程从中断程序中剥离出来 为什么这么做？  死循环：占用大量硬件资源      基于计时器的中断：会导致中断的遗漏">
+<meta property="og:description" content="多目标追踪航迹关联的相关算法简介一、最近邻法（Nearst Neighbors, NN)  用上图可以简单的概括出NN的过程：  记录之前的若干个航迹，如上图所示为2个。 在下一个测量值出现时刻前，每个航迹估计出其对应的预测值。 将测量报告（即观测值）与每个航迹的预测值之间的欧氏距离进行比较，最小的结果即将此观测值关联到对应航迹中。">
 <meta property="og:locale" content="zh_CN">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153331676.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153600953.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153537897.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424152208657.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424150844713.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424151320042.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424160918210.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424163115377.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424162638728.png">
-<meta property="og:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424164144448.png">
-<meta property="article:published_time" content="2020-04-26T01:15:31.000Z">
-<meta property="article:modified_time" content="2020-04-26T02:42:38.593Z">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-eb71820943745b45bdbb16c02d21c8eb_720w.jpg">
+<meta property="og:image" content="https://www.zhihu.com/equation?tex=%5C%7B+x_1%252C+P_1+%5C%7D%252C+%5C%7Bx_2%252C+P_2%5C%7D">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-0d5d4363796b60f3f421cf425bcfaebb_720w.jpg">
+<meta property="og:image" content="https://picb.zhimg.com/80/v2-ae814ca7537338de4b271cf4ac2b7a10_720w.jpg">
+<meta property="og:image" content="https://pic2.zhimg.com/80/v2-0caa52af500637b5c8920ef59fd745d2_720w.jpg">
+<meta property="og:image" content="https://pic3.zhimg.com/80/v2-1b56c41aa67da86b5b116ad371bbb73a_720w.jpg">
+<meta property="og:image" content="https://pic1.zhimg.com/80/v2-1b34999bb0b8ce72446f45e9a7169505_720w.jpg">
+<meta property="article:published_time" content="2020-09-22T09:24:10.000Z">
+<meta property="article:modified_time" content="2020-09-22T09:36:08.872Z">
 <meta property="article:author" content="可可">
-<meta property="article:tag" content="TI-RTOS">
+<meta property="article:tag" content="Radar Process Algorithm">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153331676.png">
+<meta name="twitter:image" content="https://pic2.zhimg.com/80/v2-eb71820943745b45bdbb16c02d21c8eb_720w.jpg">
 
-<link rel="canonical" href="http://windkeke.github.io/2020/04/26/RTOS-study-notes1/">
+<link rel="canonical" href="http://windkeke.github.io/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/">
 
 
 <script id="page-configurations">
@@ -56,7 +53,7 @@
   };
 </script>
 
-  <title>TI-RTOS学习笔记1 | 可可的部落阁</title>
+  <title>多目标追踪航迹关联的相关算法简介 | 可可的部落阁</title>
   
 
 
@@ -198,7 +195,7 @@
   
   
   <article itemscope itemtype="http://schema.org/Article" class="post-block " lang="zh-CN">
-    <link itemprop="mainEntityOfPage" href="http://windkeke.github.io/2020/04/26/RTOS-study-notes1/">
+    <link itemprop="mainEntityOfPage" href="http://windkeke.github.io/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/">
 
     <span hidden itemprop="author" itemscope itemtype="http://schema.org/Person">
       <meta itemprop="image" content="/images/avatar.jpg">
@@ -211,7 +208,7 @@
     </span>
       <header class="post-header">
         <h1 class="post-title" itemprop="name headline">
-          TI-RTOS学习笔记1
+          多目标追踪航迹关联的相关算法简介
         </h1>
 
         <div class="post-meta">
@@ -222,7 +219,7 @@
               <span class="post-meta-item-text">发表于</span>
               
 
-              <time title="创建时间：2020-04-26 09:15:31 / 修改时间：10:42:38" itemprop="dateCreated datePublished" datetime="2020-04-26T09:15:31+08:00">2020-04-26</time>
+              <time title="创建时间：2020-09-22 17:24:10 / 修改时间：17:36:08" itemprop="dateCreated datePublished" datetime="2020-09-22T17:24:10+08:00">2020-09-22</time>
             </span>
             <span class="post-meta-item">
               <span class="post-meta-item-icon">
@@ -230,7 +227,7 @@
               </span>
               <span class="post-meta-item-text">分类于</span>
                 <span itemprop="about" itemscope itemtype="http://schema.org/Thing">
-                  <a href="/categories/TI-RTOS%E5%AD%A6%E4%B9%A0%E7%AC%94%E8%AE%B0/" itemprop="url" rel="index"><span itemprop="name">TI-RTOS学习笔记</span></a>
+                  <a href="/categories/%E9%9B%B7%E8%BE%BE%E5%A4%84%E7%90%86%E7%AE%97%E6%B3%95/" itemprop="url" rel="index"><span itemprop="name">雷达处理算法</span></a>
                 </span>
             </span>
 
@@ -240,14 +237,14 @@
                 <i class="fa fa-file-word-o"></i>
               </span>
                 <span class="post-meta-item-text">本文字数：</span>
-              <span>1.1k</span>
+              <span>1.9k</span>
             </span>
             <span class="post-meta-item" title="阅读时长">
               <span class="post-meta-item-icon">
                 <i class="fa fa-clock-o"></i>
               </span>
                 <span class="post-meta-item-text">阅读时长 &asymp;</span>
-              <span>1 分钟</span>
+              <span>2 分钟</span>
             </span>
 
         </div>
@@ -259,52 +256,55 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="RTOS调度机制"><a href="#RTOS调度机制" class="headerlink" title="RTOS调度机制"></a>RTOS调度机制</h2><h3 id="Separate-Process-from-ISR"><a href="#Separate-Process-from-ISR" class="headerlink" title="Separate Process from ISR"></a>Separate Process from ISR</h3><ul>
-<li><p>将处理过程从中断程序中剥离出来</p>
-<p><strong>为什么这么做？</strong></p>
-<ul>
-<li>死循环：占用大量硬件资源</li>
-</ul>
-</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153331676.png" alt="image-20200424153331676"></p>
-<ul>
-<li><p>基于计时器的中断：会导致中断的遗漏</p>
+        <h1 id="多目标追踪航迹关联的相关算法简介"><a href="#多目标追踪航迹关联的相关算法简介" class="headerlink" title="多目标追踪航迹关联的相关算法简介"></a>多目标追踪航迹关联的相关算法简介</h1><p>一、最近邻法（Nearst Neighbors, NN)</p>
+<p><img src="https://pic2.zhimg.com/80/v2-eb71820943745b45bdbb16c02d21c8eb_720w.jpg" alt="img"></p>
+<p>用上图可以简单的概括出NN的过程：</p>
+<ol>
+<li>记录之前的若干个航迹，如上图所示为2个。</li>
+<li>在下一个测量值出现时刻前，每个航迹估计出其对应的预测值。</li>
+<li>将测量报告（即观测值）与每个航迹的预测值之间的欧氏距离进行比较，最小的结果即将此观测值关联到对应航迹中。</li>
+</ol>
 <a id="more"></a>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153600953.png" alt="image-20200424153537897"></p>
-</li>
-<li><p>使用嵌套中断：多中断情况下难以宏观调配</p>
-</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424153537897.png" alt="image-20200424153600953"></p>
-<ul>
-<li>将中断响应与处理过程分离</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424152208657.png" alt="image-20200424152208657"></p>
-<p>将中断响应与中断处理程序分离之后，用户可以通过function的优先级来完成控制，接下来将要执行的功能完全取决于用户为其所设置的优先级。</p>
-<h3 id="BIOS调度机制"><a href="#BIOS调度机制" class="headerlink" title="BIOS调度机制"></a>BIOS调度机制</h3><p>三种事件类型</p>
-<ul>
-<li>Hwi 硬件中断 优先级最高</li>
-<li>Swi 软件中断 优先级次之</li>
-<li>Idle 闲置事件 优先级最低</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424150844713.png" alt="image-20200424150844713"></p>
-<ul>
-<li>在多Hwi（Swi）任务中，可以将同类型的事件进一步划定优先级（如优先级10的事件优先于优先级1的事件执行）。Idle类型事件内部不再划分优先级区别。</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424151320042.png" alt="image-20200424151320042"></p>
-<h3 id="The-Scheduler-–-in-Action"><a href="#The-Scheduler-–-in-Action" class="headerlink" title="The Scheduler – in Action"></a>The Scheduler – in Action</h3><p>​    程序总是从main()函数的开始执行最终也结束于main()的结尾，调用BIOS_start函数。这个函数启动了BIOS 任务调度。这时没有在运行的任务，所以BIOS总是处于最低的优先级属于Idle类事件。如果有函数在Idle线程里，它们会被调用。这与main()函数中在while()循环以外的函数类似， 都是在等待‘事件’的发生（如：中断）。</p>
-<p>​    随着时间流逝，Hwi1中断被触发，Hwi1运行并且触发 Swi2，而BIOS总是运行优先级最高的线程，所以等待Hwi1执行，此时Swi2处于Ready状态。（软件中断三种状态：Ready；Running；Inactive）。</p>
-<p>​    当Swi2运行中会触发Hwi2，此时Swi2会被Hwi2抢占，CPU执行Hwi2中的post3内容，当Hwi2执行完毕后此时有两个线程处于Ready状态-Swi2与Swi3.在BIOS中，数字越大，优先级越高。所以Swi3会执行并触发Swi1。Swi1变为Ready状态，Swi3仍在执行。</p>
-<p>当Swi3执行完毕后，两个进程处于Ready状态，先执行Swi2，然后Swi1。Swi1执行完毕后，系统除了Idle任务外没有其他线程。Idle一直处于等待运行的状态，所以接下来Idle运行，最后程序结束。</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424160918210.png" alt="image-20200424162638728"></p>
-<h3 id="Adding-Tasks"><a href="#Adding-Tasks" class="headerlink" title="Adding Tasks"></a>Adding Tasks</h3><p>任务：任务意味着可以与其他的任务同时运行，就像运行在while循环里一样一直处于运行状态。产生的数据存放在自己私有的空间里，而且当他们被抢占时，他们进入阻塞或暂停状态，等待一个信号（semaphore）去解除阻塞让其继续运行。</p>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424163115377.png" alt="image-20200424160918210"></p>
-<ul>
-<li>每个Task都有其自己专属的栈空间用于存储其离开的时的数据，这使得Task可以进行阻塞与暂停操作。这点与Hwi和Swi有非常大的不同，后两者使用的数据存在系统共有栈空间内。</li>
-</ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424162638728.png" alt="image-20200424163115377"></p>
-<h3 id="TI-RTOS-Kernel-Services-–-Summary"><a href="#TI-RTOS-Kernel-Services-–-Summary" class="headerlink" title="TI-RTOS Kernel Services – Summary"></a>TI-RTOS Kernel Services – Summary</h3><p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424164144448.png" alt="image-20200424164144448"></p>
+
+<p>总结一下就是：记录－预测－利用欧氏距离关联。优点就是简单，容易理解。缺点如下：</p>
+<ol>
+<li>利用上图所示的欧氏距离无法反映出测量均值的不确定性。</li>
+<li>在多目标情况下，无法判断一个测量值是来自于一个新目标航迹起始点还是已有航迹的下一个观测值。</li>
+<li>当多个跟踪目标很接近的时候，难免会被错误匹配，即一个目标观测值被分配到其它目标的航迹上。一个错误匹配会造成Kalman滤波器收敛很慢或不收敛。</li>
+</ol>
+<p>第1个缺点一种解决方法：假定两个变量为高斯分布随机变量，均值、方差分别为 <img src="https://www.zhihu.com/equation?tex=%5C%7B+x_1%2C+P_1+%5C%7D%2C+%5C%7Bx_2%2C+P_2%5C%7D" alt="[公式]"> ，对这两个变量进行相关性测量最广泛使用的是如下公式：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-0d5d4363796b60f3f421cf425bcfaebb_720w.jpg" alt="img"></p>
+<p>这样，当假设预测值和预测值都是一个高斯分布随机变量（有点类似于Kalman滤波器对噪声的假设），通过上述公式可以求出每个航迹的预测值与观测值的相关度P，将最高的相关度分配给对应的航迹。如果不是高斯分布，至少可以给出一个启发式的判断，对结果进行排序。</p>
+<p>其它缺点NN无法克服，一种改进就是航迹分裂和多假设。</p>
+<p>二、航迹分裂和多假设（Track Splitting and Multiple Hypotheses）</p>
+<p>航迹分裂的思想是设定一个门限－称为波门，当多个航迹的预测值与观测值的相关度P均大于波门时，可以认为这个观测值可能与这些航迹相匹配。那么此时并不把观测值绑定到某一个航迹上，而是多个航迹同时匹配和更新。之后利用后续的预测值来判断观测值真正与哪一个航迹相匹配（当更多数据到来时，与正确匹配相关航迹会快速收敛到真实的目标轨迹上），错误更新的航迹几乎不可能与后来的报告相关。</p>
+<p>简单总结就是：观测值分配到多个高相关度航迹（即目标上）－依赖后续的观测来确定真实匹配目标。</p>
+<p>一个缺点是程序必须记录大量的航迹，占用内存空间大。改进这种缺点的一种方法是多假设追踪法，维护各航迹分支的历史记录，一旦一个分支被证实了，其它的分支可以被修剪掉。</p>
+<p>另一个缺点是当一个观测值与某个预测值的关联度很高，此时很难判断是否是一个新的航迹。还有一个缺点就是需要巨大的计算资源。</p>
+<p>三、追踪门（Gating）</p>
+<p>解决计算量大的问题可以修改关联概率公式，如下所示：</p>
+<p><img src="https://picb.zhimg.com/80/v2-ae814ca7537338de4b271cf4ac2b7a10_720w.jpg" alt="img"></p>
+<p>上述结构正比于关联概率的对数，通常称为马氏距离（Mahalanobis距离）或对数似然测量。</p>
+<p>为了进一步减小计算量，先对预测值和观测值进行简单的预筛选，只有通过筛选的才能计算马氏距离，这个预筛选定义为追踪门。建立多重门检测，连续剔除不可行的预测值－预测值对。</p>
+<p>筛选准则可以采取一些几何方法，例如：一个目标最大速度10m/s，每5s更新一次测量值，那么预测值与预测值的距离大于 50m的基本不可能匹配。实际就选取的比50m更大一些，因为要考虑到预测和预测的不确定性。</p>
+<p>跟踪门筛选准则有一个要求是：尽可能的让预测值－观测值对相关度超过门限的通过筛选。</p>
+<p>跟踪门如果按照上述设计准则，需要将每个预测值－观测值对进行筛选，希望有一个快速的计算方法不需要对所有的都晒选，产生如下两种方法，但是均依赖于目标的分布：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-0caa52af500637b5c8920ef59fd745d2_720w.jpg" alt="img">方法一、聚类</p>
+<p>将之前记录的结果进行聚类，这样当一个观测值存在于某一个类中时，只用晒选此观测值与此类中航迹的预测值对的相关度。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-1b56c41aa67da86b5b116ad371bbb73a_720w.jpg" alt="img">方法二、网格法</p>
+<p>将所有记录结果放放网格中，每个航迹的预测值也在某一个网格中，这样只需要计算观测值网格附近的预测值网格就行。</p>
+<p>上述两种方法依赖于目标的分布，网格法的计算量与精确度与网格大小关系比较大。</p>
+<p>四、二分查找和 K－d 树（Binary Search and Kd - Trees）</p>
+<p>网格法的不足表明需要一个更灵活的数据结构，对该数据结构的主要需求是不需要将每个观测值与每个预测值进行比较就能识别出最佳的预测值（即找到最佳的航迹/目标）对。</p>
+<p>二分查找法是一个经典的CS中的算法，但是适用于二维情况（学过一点算法的应该都知道二分原理）。从二维扩展到三维就是K - d 树，可以对所有三维点或范围进行快速检索。原理是先利用二分法查找x，然后y，最后z。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1b34999bb0b8ce72446f45e9a7169505_720w.jpg" alt="img"></p>
+<hr>
+<p>最近又重新看了一些其它文章，主流的航迹关联开始使用的是PDA,JPDA等算法及其变种，主要以论文为主，所以本文不再继续更新。本打算删除，但是也许会对一些读者有用，想继续了解这块的，可以阅读参考1.</p>
+<hr>
+<p>参考：</p>
+<ol>
+<li>多传感器数据融合手册－David L. Hall, James Linas - 电子工业出版社</li>
+</ol>
 
     </div>
 
@@ -314,7 +314,7 @@
 
       <footer class="post-footer">
           <div class="post-tags">
-              <a href="/tags/TI-RTOS/" rel="tag"># TI-RTOS</a>
+              <a href="/tags/Radar-Process-Algorithm/" rel="tag"># Radar Process Algorithm</a>
           </div>
 
         
@@ -323,12 +323,12 @@
         
     <div class="post-nav">
       <div class="post-nav-item">
-    <a href="/2020/04/26/RTOS-study-notes2/" rel="prev" title="TI-RTOS学习笔记2">
-      <i class="fa fa-chevron-left"></i> TI-RTOS学习笔记2
+    <a href="/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/" rel="prev" title="从SDK构建IWR1443驱动程序">
+      <i class="fa fa-chevron-left"></i> 从SDK构建IWR1443驱动程序
     </a></div>
       <div class="post-nav-item">
-    <a href="/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/" rel="next" title="从SDK构建IWR1443驱动程序">
-      从SDK构建IWR1443驱动程序 <i class="fa fa-chevron-right"></i>
+    <a href="/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/" rel="next" title="卡尔曼滤波">
+      卡尔曼滤波 <i class="fa fa-chevron-right"></i>
     </a></div>
     </div>
       </footer>
@@ -389,7 +389,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#TI-RTOS学习笔记"><span class="nav-number">1.</span> <span class="nav-text">TI-RTOS学习笔记</span></a><ol class="nav-child"><li class="nav-item nav-level-2"><a class="nav-link" href="#RTOS调度机制"><span class="nav-number">1.1.</span> <span class="nav-text">RTOS调度机制</span></a><ol class="nav-child"><li class="nav-item nav-level-3"><a class="nav-link" href="#Separate-Process-from-ISR"><span class="nav-number">1.1.1.</span> <span class="nav-text">Separate Process from ISR</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#BIOS调度机制"><span class="nav-number">1.1.2.</span> <span class="nav-text">BIOS调度机制</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#The-Scheduler-–-in-Action"><span class="nav-number">1.1.3.</span> <span class="nav-text">The Scheduler – in Action</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#Adding-Tasks"><span class="nav-number">1.1.4.</span> <span class="nav-text">Adding Tasks</span></a></li><li class="nav-item nav-level-3"><a class="nav-link" href="#TI-RTOS-Kernel-Services-–-Summary"><span class="nav-number">1.1.5.</span> <span class="nav-text">TI-RTOS Kernel Services – Summary</span></a></li></ol></li></ol></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-1"><a class="nav-link" href="#多目标追踪航迹关联的相关算法简介"><span class="nav-number">1.</span> <span class="nav-text">多目标追踪航迹关联的相关算法简介</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 

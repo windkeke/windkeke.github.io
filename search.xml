@@ -1,6 +1,163 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>卡尔曼滤波</title>
+    <url>/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
+    <content><![CDATA[<h2 id="一、背景—卡尔曼滤波的意义"><a href="#一、背景—卡尔曼滤波的意义" class="headerlink" title="一、背景—卡尔曼滤波的意义"></a><strong>一、背景—卡尔曼滤波的意义</strong></h2><p>随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。</p>
+<p>对于Kalman Filter的理解，用过的都知道“<strong>黄金五条</strong>”公式，且通过“<strong>预测</strong>”与“<strong>更新</strong>”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通过此文能对卡尔曼滤波的原理及状态估计算法有更一步的理解。</p>
+<p><img src="https://pic3.zhimg.com/v2-ab8d431a2b60b016557e11f21dc373db_b.jpg" alt="img"></p>
+<a id="more"></a>
+
+<h2 id="二、卡尔曼滤波的基本模型"><a href="#二、卡尔曼滤波的基本模型" class="headerlink" title="二、卡尔曼滤波的基本模型"></a><strong>二、卡尔曼滤波的基本模型</strong></h2><p>假设一离散<strong>线性动态系统</strong>的模型如下所示：</p>
+<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D+%3D+A%2Ax_%7Bk-1%7D+%2B+B%2Au_%7Bk%7D+%2B+w_%7Bk-1%7D" alt="[公式]">)——-(1)</p>
+<p><img src="https://www.zhihu.com/equation?tex=z_%7Bk%7D+%3D+H%2Ax_%7Bk%7D+%2B+v_%7Bk%7D" alt="[公式]"> ——————–(2)</p>
+<p>其中，各变量表征的意义为：</p>
+<p>———————————————————————————</p>
+<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D%5CRightarrow" alt="[公式]"> 系统状态矩阵，——-， <img src="https://www.zhihu.com/equation?tex=z_%7Bk%7D%5CRightarrow" alt="[公式]"> 状态阵的观测量（实测）</p>
+<p><img src="https://www.zhihu.com/equation?tex=A%5CRightarrow" alt="[公式]"> 状态转移矩阵 ，——-， <img src="https://www.zhihu.com/equation?tex=B%5CRightarrow" alt="[公式]"> 控制输入矩阵</p>
+<p><img src="https://www.zhihu.com/equation?tex=H%5CRightarrow" alt="[公式]"> 状态观测矩阵</p>
+<p><img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D%5CRightarrow" alt="[公式]"> 过程噪声，——-， <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D%5CRightarrow" alt="[公式]"> 测量噪声</p>
+<p>———————————————————————————</p>
+<p>如果大家学过《现代控制理论》的话，对上述模型的描述形式一定不会陌生，只是多了变量 <img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D" alt="[公式]"> 与 <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D" alt="[公式]"> 。其中，随机变量<img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D" alt="[公式]"> 代表过程噪声（<em>process noise</em>）， <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D" alt="[公式]"> 代表测量噪声（<em>measurement noise</em>），且为<strong>高斯白噪声</strong>，协方差分别为 <img src="https://www.zhihu.com/equation?tex=Q" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=R" alt="[公式]"> ，即 <img src="https://www.zhihu.com/equation?tex=p%28w%29+%5Cin+N%280%2CQ%29" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=p%28v%29+%5Cin++N%280%2CR%29" alt="[公式]"> 。</p>
+<p><strong>为什么要引入这两个变量呢？</strong></p>
+<p>对于大多数实际的控制系统（如倒立摆系统）而言，它并不是一个严格的线性时变系统(Linear Time System)，亦或系统结构参数的不确定性，导致估计的状态值 <img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D" alt="[公式]"> 存在偏差，而这个偏差值由过程噪声 <img src="https://www.zhihu.com/equation?tex=w_%7Bk%7D" alt="[公式]"> 来表征。对于状态观测方程——(2)而言，我们知道采集的信号往往是包含噪声及干扰信号的，亦或观测矩阵<img src="https://www.zhihu.com/equation?tex=H" alt="[公式]"> 自身的观测偏差，从而导致了测得的实际信号（观测值）与真实值之间存在一定的偏差，这个量由 <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D" alt="[公式]"> 来表征。</p>
+<p><img src="https://pic4.zhimg.com/v2-903444dc0a8aa3abeeaec5e5d97ef3dd_b.jpg" alt="img"></p>
+<h2 id="三、Kalman-Filter的公式推导"><a href="#三、Kalman-Filter的公式推导" class="headerlink" title="三、Kalman Filter的公式推导"></a><strong>三、Kalman Filter的公式推导</strong></h2><p>对于状态估计算法而言，我们可以获取状态量的三个值：<strong>状态预测值</strong>（ <img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ）、<strong>最优估计值</strong>（ <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D" alt="[公式]"> ）以及<strong>真实值</strong>（ <img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D" alt="[公式]"> ），卡尔曼滤波的原理就是利用卡尔曼增益来修正状态预测值，使其逼近真实值。</p>
+<p>为使其便于理解，对卡尔曼滤波的推导过程，第一个过程分为状态估计协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"> 的推导，即代价函数的求取；第二步则是卡尔曼增益矩阵及其他准则的推导。</p>
+<h2 id="3-1-状态估计协方差"><a href="#3-1-状态估计协方差" class="headerlink" title="3.1 状态估计协方差 "></a>3.1 状态估计协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"></h2><p>在对状态估计协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"> 求取之前，先介绍状态估计算法中关于系统状态矩阵的几种表示：</p>
+<p>——————————————————————————————————</p>
+<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D%5CRightarrow" alt="[公式]"> 状态的真实值；</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%5CRightarrow" alt="[公式]"> 状态的预测值，也称先验状态估计值（a prior state estimate）；</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5CRightarrow" alt="[公式]"> 状态的最优估计值，也称后验状态估计值（a posteriori state estimate）；</p>
+<p>——————————————————————————————————</p>
+<ul>
+<li>状态预测值 <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]"> 由<strong>状态预测方程</strong>可得：<strong>黄金1条</strong></li>
+</ul>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D+%3D+A%2A%5Ctilde%7Bx%7D_%7Bk-1%7D+%2B+B%2Au_%7Bk%7D" alt="[公式]">    ——–(3)</p>
+<ul>
+<li>状态最优估计值 <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D" alt="[公式]"> 可由<strong>状态更新方程</strong>可得：<strong>黄金2条</strong>  </li>
+</ul>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BK%28z_%7Bk%7D-H%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29" alt="[公式]">  —–(4)</p>
+<p>通过该方程可知，卡尔曼增益 <img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 实际上表征了状态最优估计过程中模型预测误差（<em>Predicted error</em>）与量测误差（<em>Measurement error</em>）的比重（如下所示），即 <img src="https://www.zhihu.com/equation?tex=K%5Cin%5B0%2C+1%5D" alt="[公式]"> 。当 <img src="https://www.zhihu.com/equation?tex=K%3D0" alt="[公式]"> 时，即预测误差为0，系统的状态值完全取决与预测值（ <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ）；而当 <img src="https://www.zhihu.com/equation?tex=K%3D1" alt="[公式]"> 时，即量测误差为0，系统的状态值完全取决于量侧值。</p>
+<p><img src="https://www.zhihu.com/equation?tex=K%3D" alt="[公式]"> <strong><em>Predicted error/ (Predicted error + Measurement error)</em></strong></p>
+<p>因此，可令：</p>
+<ul>
+<li><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%5E%7B-%7D+%3D+x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]">  —————(5)</li>
+<li><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%3Dx_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D" alt="[公式]">   —————(6)</li>
+<li><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5E%7B-%7D+%3DE%5B+e_%7Bk%7D%5E%7B-%7D%2Ae_%7Bk%7D%5E%7B-%7D%7B%7D%5E%7BT%7D%5D" alt="[公式]"> ———–(7)</li>
+<li><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DE%5B+e_%7Bk%7D%2Ae_%7Bk%7D%5E%7BT%7D%5D" alt="[公式]"> ————–(8) </li>
+</ul>
+<p>其中：</p>
+<p>—————————————————————————</p>
+<p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%5E%7B-%7D%5CRightarrow" alt="[公式]"> 先验状态误差</p>
+<p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%5CRightarrow" alt="[公式]"> 后验状态误差</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5E%7B-%7D%5CRightarrow" alt="[公式]"> 真实值与预测值之间的协方差</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5CRightarrow" alt="[公式]"> 真实值与最优估计值之间的协方差</p>
+<p>—————————————————————————</p>
+<p>由方程(2)(4)可知，</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BK%28H%2Ax_%7Bk%7D%2Bv_%7Bk%7D-H%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29" alt="[公式]"> ——–(9)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BKH%2Ax_%7Bk%7D-KH%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BKv_%7Bk%7D" alt="[公式]"> ——(10)</p>
+<p><strong>变换后的方程，</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D-x_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D-x_%7Bk%7D%2BKH%28x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29%2BKv_%7Bk%7D" alt="[公式]">)—(11)</p>
+<p>联立方程(5)(6)可知，</p>
+<p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D+%3D+%28I-KH%29%2Ae_%7Bk%7D%5E%7B-%7D-K%2Av_%7Bk%7D" alt="[公式]">)—————–(12)</p>
+<p>因此，由方程(8)可知估计误差方差阵 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"> 为：</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DE%5B+e_%7Bk%7D%2Ae_%7Bk%7D%5E%7BT%7D%5D%3D%28I-KH%29%2AP_%7Bk%7D%5E%7B-%7D%2A%28I-KH%29%5E%7BT%7D%2BK%2AR%2AK%5E%7BT%7D" alt="[公式]"> —(13)</p>
+<p><strong>展开可知</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DP_%7Bk%7D%5E%7B-%7D-KHP_%7Bk%7D%5E%7B-%7D-P_%7Bk%7D%5E%7B-%7DH%5E%7BT%7DK%5E%7BT%7D%2BK%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29K%5E%7BT%7D" alt="[公式]"> ——–(14)</p>
+<h2 id="3-2-状态变量"><a href="#3-2-状态变量" class="headerlink" title="3.2 状态变量"></a>3.2 状态变量</h2><p>卡尔曼滤波的估计原则就是使最优状态估计的协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"> 最小，使其越来越逼近于真实值。因此，其<strong>目标函数为：</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=J%3D%5Csum_%7Bmin%7D%7BP_%7Bk%7D%7D" alt="[公式]"> ———————–(15)</p>
+<p>对卡尔曼增益矩阵<img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 求偏导，不难可知：</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cfrac%7B%5Cpartial+%7BP_%7Bk%7D%7D%7D%7B%5Cpartial+%7BK%7D%7D%3D-2%28P_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%29%2B2K%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29%3D0" alt="[公式]">)—-(16)</p>
+<p>由此可知最优估计条件下的卡尔曼增益矩阵 <img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 为—–<strong>黄金三条</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=K%3DP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29%5E%7B-1%7D" alt="[公式]">)—-(17)  </p>
+<p>联立式(11)(14)即可知道估计误差方差阵为———–<strong>黄金四条</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3D%28I-KH%29%2AP_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ———-(18)</p>
+<p>黄金5条的最后一条的状态估计协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ，由式（5）可知：</p>
+<p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%2B1%7D%5E%7B-%7D+%3D+x_%7Bk%2B1%7D-%5Ctilde%7Bx%7D_%7Bk%2B1%7D%5E%7B-%7D++++++++++++++++++++%3D%28A%2Ax_%7Bk%7D%2BBu_%7Bk%7D%2Bw_%7Bk%7D%29-%28A%2A%5Ctilde%7Bx%7D_%7Bk%7D%2BBu_%7Bk%7D%29" alt="[公式]"> </p>
+<p>化简可知： <img src="https://www.zhihu.com/equation?tex=e_%7Bk%2B1%7D%5E%7B-%7D%3DA%28x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%29%2Bw_%7Bk%7D%3DAe_%7Bk%7D%2Bw_%7Bk%7D" alt="[公式]"> </p>
+<p>由式（7）可知：</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D+%3DE%5B+e_%7Bk%2B1%7D%5E%7B-%7D%2Ae_%7Bk%2B1%7D%5E%7B-%7D%7B%7D%5E%7BT%7D%5D%3DE%5B%28Ae_%7Bk%7D%2Bw_%7Bk%7D%29%28Ae_%7Bk%7D%2Bw_%7Bk%7D%29%5E%7BT%7D%5D" alt="[公式]"> —–(19)</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D%3DE%5B%28Ae_%7Bk%7D%29%28Ae_%7Bk%7D%29%5E%7BT%7D%5D%2BE%5Bw_%7Bk%7D%28w_%7Bk%7D%29%5E%7BT%7D%5D" alt="[公式]"> ——————–(20)</p>
+<p>由式（20）不难得知，预测协方差矩阵 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D" alt="[公式]"> 为：—<strong>黄金5条</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D%3DAP_%7Bk%7DA%5E%7BT%7D%2BQ" alt="[公式]"> ———–(21)</p>
+<p>至此，卡尔曼滤波的黄金5条全部推导完成，其“状态预测”与“状态更新”过程如下图所示。</p>
+<p><img src="https://pic4.zhimg.com/v2-32b046b882950eac20eda2c502f4e005_b.jpg" alt="img"></p>
+<h2 id="四、小结"><a href="#四、小结" class="headerlink" title="四、小结"></a><strong>四、小结</strong></h2><p>卡尔曼滤波作为一种状态最优估计算法，与《现代控制系统》中的<strong>观测器设计</strong>思维类似，都是利用观测量并结合系统的模型来对系统的状态进行估计。但二者又有不同，由前面的介绍可知卡尔曼滤波的目的是利用卡尔曼增益来修正状态预测值，而观测器设计的目的是当系统的有些状态信息无法有效获取或不易测得时，通过状态重构，以便实现反馈控制。</p>
+<p>参考文献</p>
+<p>[1] <a href="https://link.zhihu.com/?target=https%3A//www.cs.unc.edu/~welch/media/pdf/kalman_intro.pdf">An Introduction to the Kalman Filter - UNC Computer Science</a></p>
+<p>[2] <a href="https://link.zhihu.com/?target=https%3A//www.bzarg.com/p/how-a-kalman-filter-works-in-pictures/">How a Kalman filter works, in pictures</a></p>
+<p>[3] <a href="https://link.zhihu.com/?target=https%3A//towardsdatascience.com/kalman-filter-interview-bdc39f3e6cf3">Harveen Singh, Kalman Filter Interview</a></p>
+<p>[4] <a href="https://link.zhihu.com/?target=http%3A//web.mit.edu/kirtley/kirtley/binlustuff/literature/control/Kalman%20filter.pdf">Tutorial: The Kalman Filter, MIT</a></p>
+]]></content>
+      <categories>
+        <category>雷达处理算法</category>
+      </categories>
+      <tags>
+        <tag>Radar Process Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
+    <title>多目标追踪航迹关联的相关算法简介</title>
+    <url>/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/</url>
+    <content><![CDATA[<h1 id="多目标追踪航迹关联的相关算法简介"><a href="#多目标追踪航迹关联的相关算法简介" class="headerlink" title="多目标追踪航迹关联的相关算法简介"></a>多目标追踪航迹关联的相关算法简介</h1><p>一、最近邻法（Nearst Neighbors, NN)</p>
+<p><img src="https://pic2.zhimg.com/80/v2-eb71820943745b45bdbb16c02d21c8eb_720w.jpg" alt="img"></p>
+<p>用上图可以简单的概括出NN的过程：</p>
+<ol>
+<li>记录之前的若干个航迹，如上图所示为2个。</li>
+<li>在下一个测量值出现时刻前，每个航迹估计出其对应的预测值。</li>
+<li>将测量报告（即观测值）与每个航迹的预测值之间的欧氏距离进行比较，最小的结果即将此观测值关联到对应航迹中。</li>
+</ol>
+<a id="more"></a>
+
+<p>总结一下就是：记录－预测－利用欧氏距离关联。优点就是简单，容易理解。缺点如下：</p>
+<ol>
+<li>利用上图所示的欧氏距离无法反映出测量均值的不确定性。</li>
+<li>在多目标情况下，无法判断一个测量值是来自于一个新目标航迹起始点还是已有航迹的下一个观测值。</li>
+<li>当多个跟踪目标很接近的时候，难免会被错误匹配，即一个目标观测值被分配到其它目标的航迹上。一个错误匹配会造成Kalman滤波器收敛很慢或不收敛。</li>
+</ol>
+<p>第1个缺点一种解决方法：假定两个变量为高斯分布随机变量，均值、方差分别为 <img src="https://www.zhihu.com/equation?tex=%5C%7B+x_1%2C+P_1+%5C%7D%2C+%5C%7Bx_2%2C+P_2%5C%7D" alt="[公式]"> ，对这两个变量进行相关性测量最广泛使用的是如下公式：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-0d5d4363796b60f3f421cf425bcfaebb_720w.jpg" alt="img"></p>
+<p>这样，当假设预测值和预测值都是一个高斯分布随机变量（有点类似于Kalman滤波器对噪声的假设），通过上述公式可以求出每个航迹的预测值与观测值的相关度P，将最高的相关度分配给对应的航迹。如果不是高斯分布，至少可以给出一个启发式的判断，对结果进行排序。</p>
+<p>其它缺点NN无法克服，一种改进就是航迹分裂和多假设。</p>
+<p>二、航迹分裂和多假设（Track Splitting and Multiple Hypotheses）</p>
+<p>航迹分裂的思想是设定一个门限－称为波门，当多个航迹的预测值与观测值的相关度P均大于波门时，可以认为这个观测值可能与这些航迹相匹配。那么此时并不把观测值绑定到某一个航迹上，而是多个航迹同时匹配和更新。之后利用后续的预测值来判断观测值真正与哪一个航迹相匹配（当更多数据到来时，与正确匹配相关航迹会快速收敛到真实的目标轨迹上），错误更新的航迹几乎不可能与后来的报告相关。</p>
+<p>简单总结就是：观测值分配到多个高相关度航迹（即目标上）－依赖后续的观测来确定真实匹配目标。</p>
+<p>一个缺点是程序必须记录大量的航迹，占用内存空间大。改进这种缺点的一种方法是多假设追踪法，维护各航迹分支的历史记录，一旦一个分支被证实了，其它的分支可以被修剪掉。</p>
+<p>另一个缺点是当一个观测值与某个预测值的关联度很高，此时很难判断是否是一个新的航迹。还有一个缺点就是需要巨大的计算资源。</p>
+<p>三、追踪门（Gating）</p>
+<p>解决计算量大的问题可以修改关联概率公式，如下所示：</p>
+<p><img src="https://picb.zhimg.com/80/v2-ae814ca7537338de4b271cf4ac2b7a10_720w.jpg" alt="img"></p>
+<p>上述结构正比于关联概率的对数，通常称为马氏距离（Mahalanobis距离）或对数似然测量。</p>
+<p>为了进一步减小计算量，先对预测值和观测值进行简单的预筛选，只有通过筛选的才能计算马氏距离，这个预筛选定义为追踪门。建立多重门检测，连续剔除不可行的预测值－预测值对。</p>
+<p>筛选准则可以采取一些几何方法，例如：一个目标最大速度10m/s，每5s更新一次测量值，那么预测值与预测值的距离大于 50m的基本不可能匹配。实际就选取的比50m更大一些，因为要考虑到预测和预测的不确定性。</p>
+<p>跟踪门筛选准则有一个要求是：尽可能的让预测值－观测值对相关度超过门限的通过筛选。</p>
+<p>跟踪门如果按照上述设计准则，需要将每个预测值－观测值对进行筛选，希望有一个快速的计算方法不需要对所有的都晒选，产生如下两种方法，但是均依赖于目标的分布：</p>
+<p><img src="https://pic2.zhimg.com/80/v2-0caa52af500637b5c8920ef59fd745d2_720w.jpg" alt="img">方法一、聚类</p>
+<p>将之前记录的结果进行聚类，这样当一个观测值存在于某一个类中时，只用晒选此观测值与此类中航迹的预测值对的相关度。</p>
+<p><img src="https://pic3.zhimg.com/80/v2-1b56c41aa67da86b5b116ad371bbb73a_720w.jpg" alt="img">方法二、网格法</p>
+<p>将所有记录结果放放网格中，每个航迹的预测值也在某一个网格中，这样只需要计算观测值网格附近的预测值网格就行。</p>
+<p>上述两种方法依赖于目标的分布，网格法的计算量与精确度与网格大小关系比较大。</p>
+<p>四、二分查找和 K－d 树（Binary Search and Kd - Trees）</p>
+<p>网格法的不足表明需要一个更灵活的数据结构，对该数据结构的主要需求是不需要将每个观测值与每个预测值进行比较就能识别出最佳的预测值（即找到最佳的航迹/目标）对。</p>
+<p>二分查找法是一个经典的CS中的算法，但是适用于二维情况（学过一点算法的应该都知道二分原理）。从二维扩展到三维就是K - d 树，可以对所有三维点或范围进行快速检索。原理是先利用二分法查找x，然后y，最后z。</p>
+<p><img src="https://pic1.zhimg.com/80/v2-1b34999bb0b8ce72446f45e9a7169505_720w.jpg" alt="img"></p>
+<hr>
+<p>最近又重新看了一些其它文章，主流的航迹关联开始使用的是PDA,JPDA等算法及其变种，主要以论文为主，所以本文不再继续更新。本打算删除，但是也许会对一些读者有用，想继续了解这块的，可以阅读参考1.</p>
+<hr>
+<p>参考：</p>
+<ol>
+<li>多传感器数据融合手册－David L. Hall, James Linas - 电子工业出版社</li>
+</ol>
+]]></content>
+      <categories>
+        <category>雷达处理算法</category>
+      </categories>
+      <tags>
+        <tag>Radar Process Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>从SDK构建IWR1443驱动程序</title>
     <url>/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="首先新建一个CCS工程"><a href="#首先新建一个CCS工程" class="headerlink" title="首先新建一个CCS工程"></a>首先新建一个CCS工程</h1><ul>
