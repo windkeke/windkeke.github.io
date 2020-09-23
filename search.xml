@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>卡尔曼滤波</title>
-    <url>/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
+    <url>/blog/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
     <content><![CDATA[<h2 id="一、背景—卡尔曼滤波的意义"><a href="#一、背景—卡尔曼滤波的意义" class="headerlink" title="一、背景—卡尔曼滤波的意义"></a><strong>一、背景—卡尔曼滤波的意义</strong></h2><p>随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。</p>
 <p>对于Kalman Filter的理解，用过的都知道“<strong>黄金五条</strong>”公式，且通过“<strong>预测</strong>”与“<strong>更新</strong>”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通过此文能对卡尔曼滤波的原理及状态估计算法有更一步的理解。</p>
 <p><img src="https://pic3.zhimg.com/v2-ab8d431a2b60b016557e11f21dc373db_b.jpg" alt="img"></p>
@@ -99,7 +99,7 @@
   </entry>
   <entry>
     <title>多目标追踪航迹关联的相关算法简介</title>
-    <url>/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/</url>
+    <url>/blog/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/</url>
     <content><![CDATA[<h1 id="多目标追踪航迹关联的相关算法简介"><a href="#多目标追踪航迹关联的相关算法简介" class="headerlink" title="多目标追踪航迹关联的相关算法简介"></a>多目标追踪航迹关联的相关算法简介</h1><p>一、最近邻法（Nearst Neighbors, NN)</p>
 <p><img src="https://pic2.zhimg.com/80/v2-eb71820943745b45bdbb16c02d21c8eb_720w.jpg" alt="img"></p>
 <p>用上图可以简单的概括出NN的过程：</p>
@@ -159,7 +159,7 @@
   </entry>
   <entry>
     <title>从SDK构建IWR1443驱动程序</title>
-    <url>/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/</url>
+    <url>/blog/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="首先新建一个CCS工程"><a href="#首先新建一个CCS工程" class="headerlink" title="首先新建一个CCS工程"></a>首先新建一个CCS工程</h1><ul>
 <li>选择目标型号IWR1443，并且在下面选择新建一个SYS/BIOS工程，点击Next</li>
 </ul>
@@ -221,7 +221,7 @@
   </entry>
   <entry>
     <title>TI-RTOS学习笔记1</title>
-    <url>/2020/04/26/RTOS-study-notes1/</url>
+    <url>/blog/2020/04/26/RTOS-study-notes1/</url>
     <content><![CDATA[<h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="RTOS调度机制"><a href="#RTOS调度机制" class="headerlink" title="RTOS调度机制"></a>RTOS调度机制</h2><h3 id="Separate-Process-from-ISR"><a href="#Separate-Process-from-ISR" class="headerlink" title="Separate Process from ISR"></a>Separate Process from ISR</h3><ul>
 <li><p>将处理过程从中断程序中剥离出来</p>
 <p><strong>为什么这么做？</strong></p>
@@ -278,7 +278,7 @@
   </entry>
   <entry>
     <title>TI-RTOS学习笔记2</title>
-    <url>/2020/04/26/RTOS-study-notes2/</url>
+    <url>/blog/2020/04/26/RTOS-study-notes2/</url>
     <content><![CDATA[<h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="TI-RTOS-Environment"><a href="#TI-RTOS-Environment" class="headerlink" title="TI-RTOS Environment"></a>TI-RTOS Environment</h2><h3 id="Kernel-APIs-Objects-and-Handles"><a href="#Kernel-APIs-Objects-and-Handles" class="headerlink" title="Kernel APIs, Objects and Handles"></a>Kernel APIs, Objects and Handles</h3><ul>
 <li>在代码中，当Swi_post()被调用后，BIOS Scheduler运行然后从Swi对象中抓取它的优先级。然后依据优先级将Swi安排在Swi queue中。当Swi在queue的头部时其准备运行，BIOS将会调用Swi对象(或者称为结构体)中的函数，在这个例子里是Audio_fxn。</li>
 </ul>
@@ -295,7 +295,7 @@
   </entry>
   <entry>
     <title>IWR1443使用内置config文件</title>
-    <url>/2020/04/22/iwr1443insert-config/</url>
+    <url>/blog/2020/04/22/iwr1443insert-config/</url>
     <content><![CDATA[<p>TI为推出的IWR1443毫米波雷达评估板提供了丰富可用的演示demo，这些都需要上电之后下载配置文件，这里经过修改可以将配置文件固化在固件中，使得评估板上电即开始工作。</p>
 <ul>
 <li><p>不过需要注意的是评估板的芯片版本必须与SDK的版本一致，否则会出现无法下载固件，CCS编译错误等问题。</p>
