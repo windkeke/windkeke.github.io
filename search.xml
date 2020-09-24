@@ -2,7 +2,7 @@
 <search>
   <entry>
     <title>卡尔曼滤波</title>
-    <url>/blog/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
+    <url>/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
     <content><![CDATA[<h2 id="一、背景—卡尔曼滤波的意义"><a href="#一、背景—卡尔曼滤波的意义" class="headerlink" title="一、背景—卡尔曼滤波的意义"></a><strong>一、背景—卡尔曼滤波的意义</strong></h2><p>随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。</p>
 <p>对于Kalman Filter的理解，用过的都知道“<strong>黄金五条</strong>”公式，且通过“<strong>预测</strong>”与“<strong>更新</strong>”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通过此文能对卡尔曼滤波的原理及状态估计算法有更一步的理解。</p>
 <p><img src="https://pic3.zhimg.com/v2-ab8d431a2b60b016557e11f21dc373db_b.jpg" alt="img"></p>
@@ -98,68 +98,8 @@
       </tags>
   </entry>
   <entry>
-    <title>多目标追踪航迹关联的相关算法简介</title>
-    <url>/blog/2020/09/22/%E5%A4%9A%E7%9B%AE%E6%A0%87%E8%BF%BD%E8%B8%AA%E8%88%AA%E8%BF%B9%E5%85%B3%E8%81%94%E7%9A%84%E7%9B%B8%E5%85%B3%E7%AE%97%E6%B3%95%E7%AE%80%E4%BB%8B/</url>
-    <content><![CDATA[<h1 id="多目标追踪航迹关联的相关算法简介"><a href="#多目标追踪航迹关联的相关算法简介" class="headerlink" title="多目标追踪航迹关联的相关算法简介"></a>多目标追踪航迹关联的相关算法简介</h1><p>一、最近邻法（Nearst Neighbors, NN)</p>
-<p><img src="https://pic2.zhimg.com/80/v2-eb71820943745b45bdbb16c02d21c8eb_720w.jpg" alt="img"></p>
-<p>用上图可以简单的概括出NN的过程：</p>
-<ol>
-<li>记录之前的若干个航迹，如上图所示为2个。</li>
-<li>在下一个测量值出现时刻前，每个航迹估计出其对应的预测值。</li>
-<li>将测量报告（即观测值）与每个航迹的预测值之间的欧氏距离进行比较，最小的结果即将此观测值关联到对应航迹中。</li>
-</ol>
-<a id="more"></a>
-
-<p>总结一下就是：记录－预测－利用欧氏距离关联。优点就是简单，容易理解。缺点如下：</p>
-<ol>
-<li>利用上图所示的欧氏距离无法反映出测量均值的不确定性。</li>
-<li>在多目标情况下，无法判断一个测量值是来自于一个新目标航迹起始点还是已有航迹的下一个观测值。</li>
-<li>当多个跟踪目标很接近的时候，难免会被错误匹配，即一个目标观测值被分配到其它目标的航迹上。一个错误匹配会造成Kalman滤波器收敛很慢或不收敛。</li>
-</ol>
-<p>第1个缺点一种解决方法：假定两个变量为高斯分布随机变量，均值、方差分别为 <img src="https://www.zhihu.com/equation?tex=%5C%7B+x_1%2C+P_1+%5C%7D%2C+%5C%7Bx_2%2C+P_2%5C%7D" alt="[公式]"> ，对这两个变量进行相关性测量最广泛使用的是如下公式：</p>
-<p><img src="https://pic2.zhimg.com/80/v2-0d5d4363796b60f3f421cf425bcfaebb_720w.jpg" alt="img"></p>
-<p>这样，当假设预测值和预测值都是一个高斯分布随机变量（有点类似于Kalman滤波器对噪声的假设），通过上述公式可以求出每个航迹的预测值与观测值的相关度P，将最高的相关度分配给对应的航迹。如果不是高斯分布，至少可以给出一个启发式的判断，对结果进行排序。</p>
-<p>其它缺点NN无法克服，一种改进就是航迹分裂和多假设。</p>
-<p>二、航迹分裂和多假设（Track Splitting and Multiple Hypotheses）</p>
-<p>航迹分裂的思想是设定一个门限－称为波门，当多个航迹的预测值与观测值的相关度P均大于波门时，可以认为这个观测值可能与这些航迹相匹配。那么此时并不把观测值绑定到某一个航迹上，而是多个航迹同时匹配和更新。之后利用后续的预测值来判断观测值真正与哪一个航迹相匹配（当更多数据到来时，与正确匹配相关航迹会快速收敛到真实的目标轨迹上），错误更新的航迹几乎不可能与后来的报告相关。</p>
-<p>简单总结就是：观测值分配到多个高相关度航迹（即目标上）－依赖后续的观测来确定真实匹配目标。</p>
-<p>一个缺点是程序必须记录大量的航迹，占用内存空间大。改进这种缺点的一种方法是多假设追踪法，维护各航迹分支的历史记录，一旦一个分支被证实了，其它的分支可以被修剪掉。</p>
-<p>另一个缺点是当一个观测值与某个预测值的关联度很高，此时很难判断是否是一个新的航迹。还有一个缺点就是需要巨大的计算资源。</p>
-<p>三、追踪门（Gating）</p>
-<p>解决计算量大的问题可以修改关联概率公式，如下所示：</p>
-<p><img src="https://picb.zhimg.com/80/v2-ae814ca7537338de4b271cf4ac2b7a10_720w.jpg" alt="img"></p>
-<p>上述结构正比于关联概率的对数，通常称为马氏距离（Mahalanobis距离）或对数似然测量。</p>
-<p>为了进一步减小计算量，先对预测值和观测值进行简单的预筛选，只有通过筛选的才能计算马氏距离，这个预筛选定义为追踪门。建立多重门检测，连续剔除不可行的预测值－预测值对。</p>
-<p>筛选准则可以采取一些几何方法，例如：一个目标最大速度10m/s，每5s更新一次测量值，那么预测值与预测值的距离大于 50m的基本不可能匹配。实际就选取的比50m更大一些，因为要考虑到预测和预测的不确定性。</p>
-<p>跟踪门筛选准则有一个要求是：尽可能的让预测值－观测值对相关度超过门限的通过筛选。</p>
-<p>跟踪门如果按照上述设计准则，需要将每个预测值－观测值对进行筛选，希望有一个快速的计算方法不需要对所有的都晒选，产生如下两种方法，但是均依赖于目标的分布：</p>
-<p><img src="https://pic2.zhimg.com/80/v2-0caa52af500637b5c8920ef59fd745d2_720w.jpg" alt="img">方法一、聚类</p>
-<p>将之前记录的结果进行聚类，这样当一个观测值存在于某一个类中时，只用晒选此观测值与此类中航迹的预测值对的相关度。</p>
-<p><img src="https://pic3.zhimg.com/80/v2-1b56c41aa67da86b5b116ad371bbb73a_720w.jpg" alt="img">方法二、网格法</p>
-<p>将所有记录结果放放网格中，每个航迹的预测值也在某一个网格中，这样只需要计算观测值网格附近的预测值网格就行。</p>
-<p>上述两种方法依赖于目标的分布，网格法的计算量与精确度与网格大小关系比较大。</p>
-<p>四、二分查找和 K－d 树（Binary Search and Kd - Trees）</p>
-<p>网格法的不足表明需要一个更灵活的数据结构，对该数据结构的主要需求是不需要将每个观测值与每个预测值进行比较就能识别出最佳的预测值（即找到最佳的航迹/目标）对。</p>
-<p>二分查找法是一个经典的CS中的算法，但是适用于二维情况（学过一点算法的应该都知道二分原理）。从二维扩展到三维就是K - d 树，可以对所有三维点或范围进行快速检索。原理是先利用二分法查找x，然后y，最后z。</p>
-<p><img src="https://pic1.zhimg.com/80/v2-1b34999bb0b8ce72446f45e9a7169505_720w.jpg" alt="img"></p>
-<hr>
-<p>最近又重新看了一些其它文章，主流的航迹关联开始使用的是PDA,JPDA等算法及其变种，主要以论文为主，所以本文不再继续更新。本打算删除，但是也许会对一些读者有用，想继续了解这块的，可以阅读参考1.</p>
-<hr>
-<p>参考：</p>
-<ol>
-<li>多传感器数据融合手册－David L. Hall, James Linas - 电子工业出版社</li>
-</ol>
-]]></content>
-      <categories>
-        <category>雷达处理算法</category>
-      </categories>
-      <tags>
-        <tag>Radar Process Algorithm</tag>
-      </tags>
-  </entry>
-  <entry>
     <title>从SDK构建IWR1443驱动程序</title>
-    <url>/blog/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/</url>
+    <url>/2020/05/12/%E4%BB%8ESDK%E6%9E%84%E5%BB%BAiwr1443%E9%A9%B1%E5%8A%A8%E7%A8%8B%E5%BA%8F/</url>
     <content><![CDATA[<h1 id="首先新建一个CCS工程"><a href="#首先新建一个CCS工程" class="headerlink" title="首先新建一个CCS工程"></a>首先新建一个CCS工程</h1><ul>
 <li>选择目标型号IWR1443，并且在下面选择新建一个SYS/BIOS工程，点击Next</li>
 </ul>
@@ -221,7 +161,7 @@
   </entry>
   <entry>
     <title>TI-RTOS学习笔记1</title>
-    <url>/blog/2020/04/26/RTOS-study-notes1/</url>
+    <url>/2020/04/26/RTOS-study-notes1/</url>
     <content><![CDATA[<h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="RTOS调度机制"><a href="#RTOS调度机制" class="headerlink" title="RTOS调度机制"></a>RTOS调度机制</h2><h3 id="Separate-Process-from-ISR"><a href="#Separate-Process-from-ISR" class="headerlink" title="Separate Process from ISR"></a>Separate Process from ISR</h3><ul>
 <li><p>将处理过程从中断程序中剥离出来</p>
 <p><strong>为什么这么做？</strong></p>
@@ -278,7 +218,7 @@
   </entry>
   <entry>
     <title>TI-RTOS学习笔记2</title>
-    <url>/blog/2020/04/26/RTOS-study-notes2/</url>
+    <url>/2020/04/26/RTOS-study-notes2/</url>
     <content><![CDATA[<h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="TI-RTOS-Environment"><a href="#TI-RTOS-Environment" class="headerlink" title="TI-RTOS Environment"></a>TI-RTOS Environment</h2><h3 id="Kernel-APIs-Objects-and-Handles"><a href="#Kernel-APIs-Objects-and-Handles" class="headerlink" title="Kernel APIs, Objects and Handles"></a>Kernel APIs, Objects and Handles</h3><ul>
 <li>在代码中，当Swi_post()被调用后，BIOS Scheduler运行然后从Swi对象中抓取它的优先级。然后依据优先级将Swi安排在Swi queue中。当Swi在queue的头部时其准备运行，BIOS将会调用Swi对象(或者称为结构体)中的函数，在这个例子里是Audio_fxn。</li>
 </ul>
@@ -295,7 +235,7 @@
   </entry>
   <entry>
     <title>IWR1443使用内置config文件</title>
-    <url>/blog/2020/04/22/iwr1443insert-config/</url>
+    <url>/2020/04/22/iwr1443insert-config/</url>
     <content><![CDATA[<p>TI为推出的IWR1443毫米波雷达评估板提供了丰富可用的演示demo，这些都需要上电之后下载配置文件，这里经过修改可以将配置文件固化在固件中，使得评估板上电即开始工作。</p>
 <ul>
 <li><p>不过需要注意的是评估板的芯片版本必须与SDK的版本一致，否则会出现无法下载固件，CCS编译错误等问题。</p>
