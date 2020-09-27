@@ -1,6 +1,18 @@
 <?xml version="1.0" encoding="utf-8"?>
 <search>
   <entry>
+    <title>卡尔曼滤波公式推导</title>
+    <url>/2020/09/23/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2%E5%85%AC%E5%BC%8F%E6%8E%A8%E5%AF%BC/</url>
+    <content><![CDATA[<p>系统状态矩阵<br>$$<br>X_{k} = A \cdot X_{k-1} + B \cdot U_{k} + W_{k-1}<br>$$<br>观测矩阵<br>$$<br>Z_{k} = H \cdot X_{k} + V_{k}<br>$$<br>其中$X_{k}$表示系统状态矩阵，$Z_{k}$表示系统观测矩阵</p>
+]]></content>
+      <categories>
+        <category>雷达处理算法</category>
+      </categories>
+      <tags>
+        <tag>Radar Process Algorithm</tag>
+      </tags>
+  </entry>
+  <entry>
     <title>卡尔曼滤波</title>
     <url>/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/</url>
     <content><![CDATA[<h2 id="一、背景—卡尔曼滤波的意义"><a href="#一、背景—卡尔曼滤波的意义" class="headerlink" title="一、背景—卡尔曼滤波的意义"></a><strong>一、背景—卡尔曼滤波的意义</strong></h2><p>随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。</p>
