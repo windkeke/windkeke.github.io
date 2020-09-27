@@ -254,8 +254,7 @@
         <h1 id="TI-RTOS学习笔记"><a href="#TI-RTOS学习笔记" class="headerlink" title="TI-RTOS学习笔记"></a>TI-RTOS学习笔记</h1><h2 id="TI-RTOS-Environment"><a href="#TI-RTOS-Environment" class="headerlink" title="TI-RTOS Environment"></a>TI-RTOS Environment</h2><h3 id="Kernel-APIs-Objects-and-Handles"><a href="#Kernel-APIs-Objects-and-Handles" class="headerlink" title="Kernel APIs, Objects and Handles"></a>Kernel APIs, Objects and Handles</h3><ul>
 <li>在代码中，当Swi_post()被调用后，BIOS Scheduler运行然后从Swi对象中抓取它的优先级。然后依据优先级将Swi安排在Swi queue中。当Swi在queue的头部时其准备运行，BIOS将会调用Swi对象(或者称为结构体)中的函数，在这个例子里是Audio_fxn。</li>
 </ul>
-<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424170045248.png" alt="image-20200424164609777"></p>
-<a id="more"></a>
+<p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424170045248.png" alt="image-20200424164609777"><br><a id="more"></a></p>
 <h3 id="Thread-Object-Creation-in-BIOS"><a href="#Thread-Object-Creation-in-BIOS" class="headerlink" title="Thread (Object) Creation in BIOS"></a>Thread (Object) Creation in BIOS</h3><p><img src="https://blog-1301937525.cos.ap-beijing.myqcloud.com/blog_image/image-20200424164609777.png" alt="image-20200424170045248"></p>
 
     </div>
@@ -472,6 +471,8 @@
 
 
 
+
+  
 
   
 

@@ -20,12 +20,12 @@
     var CONFIG = {"hostname":"windkeke.github.io","root":"/","scheme":"Gemini","version":"7.7.2","exturl":false,"sidebar":{"position":"left","display":"post","padding":18,"offset":12,"onmobile":false},"copycode":{"enable":true,"show_result":true,"style":"mac"},"back2top":{"enable":true,"sidebar":false,"scrollpercent":false},"bookmark":{"enable":false,"color":"#222","save":"auto"},"fancybox":false,"mediumzoom":false,"lazyload":false,"pangu":false,"comments":{"style":"tabs","active":null,"storage":true,"lazyload":false,"nav":null},"algolia":{"hits":{"per_page":10},"labels":{"input_placeholder":"Search for Posts","hits_empty":"We didn't find any results for the search: ${query}","hits_stats":"${hits} results found in ${time} ms"}},"localsearch":{"enable":true,"trigger":"auto","top_n_per_article":1,"unescape":false,"preload":false},"motion":{"enable":true,"async":false,"transition":{"post_block":"fadeIn","post_header":"slideDownIn","post_body":"slideDownIn","coll_header":"slideLeftIn","sidebar":"slideUpIn"}},"path":"search.xml"};
   </script>
 
-  <meta name="description" content="一、背景—卡尔曼滤波的意义随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。 对于Kalman Filter的理解，用过的都知道“黄金五条”公式，且通过“预测”与“更新”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通过">
+  <meta name="description" content="一、背景—-卡尔曼滤波的意义随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。 对于Kalman Filter的理解，用过的都知道“黄金五条”公式，且通过“预测”与“更新”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通">
 <meta property="og:type" content="article">
 <meta property="og:title" content="卡尔曼滤波">
 <meta property="og:url" content="http://windkeke.github.io/2020/09/22/%E5%8D%A1%E5%B0%94%E6%9B%BC%E6%BB%A4%E6%B3%A2/index.html">
 <meta property="og:site_name" content="可可的部落阁">
-<meta property="og:description" content="一、背景—卡尔曼滤波的意义随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。 对于Kalman Filter的理解，用过的都知道“黄金五条”公式，且通过“预测”与“更新”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通过">
+<meta property="og:description" content="一、背景—-卡尔曼滤波的意义随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。 对于Kalman Filter的理解，用过的都知道“黄金五条”公式，且通过“预测”与“更新”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通">
 <meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://pic3.zhimg.com/v2-ab8d431a2b60b016557e11f21dc373db_b.jpg">
 <meta property="og:image" content="https://www.zhihu.com/equation?tex=x_%7Bk%7D+%253D+A*x_%7Bk-1%7D+%252B+B*u_%7Bk%7D+%252B+w_%7Bk-1%7D">
@@ -321,20 +321,19 @@
     <div class="post-body" itemprop="articleBody">
 
       
-        <h2 id="一、背景—卡尔曼滤波的意义"><a href="#一、背景—卡尔曼滤波的意义" class="headerlink" title="一、背景—卡尔曼滤波的意义"></a><strong>一、背景—卡尔曼滤波的意义</strong></h2><p>随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。</p>
+        <h2 id="一、背景—-卡尔曼滤波的意义"><a href="#一、背景—-卡尔曼滤波的意义" class="headerlink" title="一、背景—-卡尔曼滤波的意义"></a><strong>一、背景—-卡尔曼滤波的意义</strong></h2><p>随着传感技术、机器人、自动驾驶以及航空航天等技术的不断发展，对控制系统的精度及稳定性的要求也越来越高。卡尔曼滤波作为一种状态最优估计的方法，其应用也越来越普遍，如在无人机、机器人等领域均得到了广泛应用。</p>
 <p>对于Kalman Filter的理解，用过的都知道“<strong>黄金五条</strong>”公式，且通过“<strong>预测</strong>”与“<strong>更新</strong>”两个过程来对系统的状态进行最优估计，但完整的推导过程却不一定能写出来，希望通过此文能对卡尔曼滤波的原理及状态估计算法有更一步的理解。</p>
 <p><img src="https://pic3.zhimg.com/v2-ab8d431a2b60b016557e11f21dc373db_b.jpg" alt="img"></p>
 <a id="more"></a>
-
 <h2 id="二、卡尔曼滤波的基本模型"><a href="#二、卡尔曼滤波的基本模型" class="headerlink" title="二、卡尔曼滤波的基本模型"></a><strong>二、卡尔曼滤波的基本模型</strong></h2><p>假设一离散<strong>线性动态系统</strong>的模型如下所示：</p>
-<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D+%3D+A%2Ax_%7Bk-1%7D+%2B+B%2Au_%7Bk%7D+%2B+w_%7Bk-1%7D" alt="[公式]">)——-(1)</p>
-<p><img src="https://www.zhihu.com/equation?tex=z_%7Bk%7D+%3D+H%2Ax_%7Bk%7D+%2B+v_%7Bk%7D" alt="[公式]"> ——————–(2)</p>
+<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D+%3D+A%2Ax_%7Bk-1%7D+%2B+B%2Au_%7Bk%7D+%2B+w_%7Bk-1%7D" alt="[公式]">———-(1)</p>
+<p><img src="https://www.zhihu.com/equation?tex=z_%7Bk%7D+%3D+H%2Ax_%7Bk%7D+%2B+v_%7Bk%7D" alt="[公式]"> ——————————(2)</p>
 <p>其中，各变量表征的意义为：</p>
 <p>———————————————————————————</p>
-<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D%5CRightarrow" alt="[公式]"> 系统状态矩阵，——-， <img src="https://www.zhihu.com/equation?tex=z_%7Bk%7D%5CRightarrow" alt="[公式]"> 状态阵的观测量（实测）</p>
-<p><img src="https://www.zhihu.com/equation?tex=A%5CRightarrow" alt="[公式]"> 状态转移矩阵 ，——-， <img src="https://www.zhihu.com/equation?tex=B%5CRightarrow" alt="[公式]"> 控制输入矩阵</p>
+<p><img src="https://www.zhihu.com/equation?tex=x_%7Bk%7D%5CRightarrow" alt="[公式]"> 系统状态矩阵，———-， <img src="https://www.zhihu.com/equation?tex=z_%7Bk%7D%5CRightarrow" alt="[公式]"> 状态阵的观测量（实测）</p>
+<p><img src="https://www.zhihu.com/equation?tex=A%5CRightarrow" alt="[公式]"> 状态转移矩阵 ，———-， <img src="https://www.zhihu.com/equation?tex=B%5CRightarrow" alt="[公式]"> 控制输入矩阵</p>
 <p><img src="https://www.zhihu.com/equation?tex=H%5CRightarrow" alt="[公式]"> 状态观测矩阵</p>
-<p><img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D%5CRightarrow" alt="[公式]"> 过程噪声，——-， <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D%5CRightarrow" alt="[公式]"> 测量噪声</p>
+<p><img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D%5CRightarrow" alt="[公式]"> 过程噪声，———-， <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D%5CRightarrow" alt="[公式]"> 测量噪声</p>
 <p>———————————————————————————</p>
 <p>如果大家学过《现代控制理论》的话，对上述模型的描述形式一定不会陌生，只是多了变量 <img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D" alt="[公式]"> 与 <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D" alt="[公式]"> 。其中，随机变量<img src="https://www.zhihu.com/equation?tex=w_%7Bk-1%7D" alt="[公式]"> 代表过程噪声（<em>process noise</em>）， <img src="https://www.zhihu.com/equation?tex=v_%7Bk%7D" alt="[公式]"> 代表测量噪声（<em>measurement noise</em>），且为<strong>高斯白噪声</strong>，协方差分别为 <img src="https://www.zhihu.com/equation?tex=Q" alt="[公式]"> 和 <img src="https://www.zhihu.com/equation?tex=R" alt="[公式]"> ，即 <img src="https://www.zhihu.com/equation?tex=p%28w%29+%5Cin+N%280%2CQ%29" alt="[公式]"> ， <img src="https://www.zhihu.com/equation?tex=p%28v%29+%5Cin++N%280%2CR%29" alt="[公式]"> 。</p>
 <p><strong>为什么要引入这两个变量呢？</strong></p>
@@ -351,19 +350,19 @@
 <ul>
 <li>状态预测值 <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]"> 由<strong>状态预测方程</strong>可得：<strong>黄金1条</strong></li>
 </ul>
-<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D+%3D+A%2A%5Ctilde%7Bx%7D_%7Bk-1%7D+%2B+B%2Au_%7Bk%7D" alt="[公式]">    ——–(3)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D+%3D+A%2A%5Ctilde%7Bx%7D_%7Bk-1%7D+%2B+B%2Au_%7Bk%7D" alt="[公式]">    ————(3)</p>
 <ul>
 <li>状态最优估计值 <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D" alt="[公式]"> 可由<strong>状态更新方程</strong>可得：<strong>黄金2条</strong>  </li>
 </ul>
-<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BK%28z_%7Bk%7D-H%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29" alt="[公式]">  —–(4)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BK%28z_%7Bk%7D-H%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29" alt="[公式]">  ——-(4)</p>
 <p>通过该方程可知，卡尔曼增益 <img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 实际上表征了状态最优估计过程中模型预测误差（<em>Predicted error</em>）与量测误差（<em>Measurement error</em>）的比重（如下所示），即 <img src="https://www.zhihu.com/equation?tex=K%5Cin%5B0%2C+1%5D" alt="[公式]"> 。当 <img src="https://www.zhihu.com/equation?tex=K%3D0" alt="[公式]"> 时，即预测误差为0，系统的状态值完全取决与预测值（ <img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ）；而当 <img src="https://www.zhihu.com/equation?tex=K%3D1" alt="[公式]"> 时，即量测误差为0，系统的状态值完全取决于量侧值。</p>
 <p><img src="https://www.zhihu.com/equation?tex=K%3D" alt="[公式]"> <strong><em>Predicted error/ (Predicted error + Measurement error)</em></strong></p>
 <p>因此，可令：</p>
 <ul>
-<li><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%5E%7B-%7D+%3D+x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]">  —————(5)</li>
-<li><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%3Dx_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D" alt="[公式]">   —————(6)</li>
-<li><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5E%7B-%7D+%3DE%5B+e_%7Bk%7D%5E%7B-%7D%2Ae_%7Bk%7D%5E%7B-%7D%7B%7D%5E%7BT%7D%5D" alt="[公式]"> ———–(7)</li>
-<li><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DE%5B+e_%7Bk%7D%2Ae_%7Bk%7D%5E%7BT%7D%5D" alt="[公式]"> ————–(8) </li>
+<li><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%5E%7B-%7D+%3D+x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D" alt="[公式]">  ———————-(5)</li>
+<li><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D%3Dx_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D" alt="[公式]">   ———————-(6)</li>
+<li><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5E%7B-%7D+%3DE%5B+e_%7Bk%7D%5E%7B-%7D%2Ae_%7Bk%7D%5E%7B-%7D%7B%7D%5E%7BT%7D%5D" alt="[公式]"> —————-(7)</li>
+<li><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DE%5B+e_%7Bk%7D%2Ae_%7Bk%7D%5E%7BT%7D%5D" alt="[公式]"> ———————(8) </li>
 </ul>
 <p>其中：</p>
 <p>—————————————————————————</p>
@@ -373,32 +372,32 @@
 <p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5CRightarrow" alt="[公式]"> 真实值与最优估计值之间的协方差</p>
 <p>—————————————————————————</p>
 <p>由方程(2)(4)可知，</p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BK%28H%2Ax_%7Bk%7D%2Bv_%7Bk%7D-H%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29" alt="[公式]"> ——–(9)</p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BKH%2Ax_%7Bk%7D-KH%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BKv_%7Bk%7D" alt="[公式]"> ——(10)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BK%28H%2Ax_%7Bk%7D%2Bv_%7Bk%7D-H%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29" alt="[公式]"> ————(9)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BKH%2Ax_%7Bk%7D-KH%2A%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%2BKv_%7Bk%7D" alt="[公式]"> ———(10)</p>
 <p><strong>变换后的方程，</strong></p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D-x_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D-x_%7Bk%7D%2BKH%28x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29%2BKv_%7Bk%7D" alt="[公式]">)—(11)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Ctilde%7Bx%7D_%7Bk%7D-x_%7Bk%7D%3D%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D-x_%7Bk%7D%2BKH%28x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%5E%7B-%7D%29%2BKv_%7Bk%7D" alt="[公式]">—-(11)</p>
 <p>联立方程(5)(6)可知，</p>
-<p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D+%3D+%28I-KH%29%2Ae_%7Bk%7D%5E%7B-%7D-K%2Av_%7Bk%7D" alt="[公式]">)—————–(12)</p>
+<p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%7D+%3D+%28I-KH%29%2Ae_%7Bk%7D%5E%7B-%7D-K%2Av_%7Bk%7D" alt="[公式]">————————-(12)</p>
 <p>因此，由方程(8)可知估计误差方差阵 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"> 为：</p>
-<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DE%5B+e_%7Bk%7D%2Ae_%7Bk%7D%5E%7BT%7D%5D%3D%28I-KH%29%2AP_%7Bk%7D%5E%7B-%7D%2A%28I-KH%29%5E%7BT%7D%2BK%2AR%2AK%5E%7BT%7D" alt="[公式]"> —(13)</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DE%5B+e_%7Bk%7D%2Ae_%7Bk%7D%5E%7BT%7D%5D%3D%28I-KH%29%2AP_%7Bk%7D%5E%7B-%7D%2A%28I-KH%29%5E%7BT%7D%2BK%2AR%2AK%5E%7BT%7D" alt="[公式]"> —-(13)</p>
 <p><strong>展开可知</strong></p>
-<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DP_%7Bk%7D%5E%7B-%7D-KHP_%7Bk%7D%5E%7B-%7D-P_%7Bk%7D%5E%7B-%7DH%5E%7BT%7DK%5E%7BT%7D%2BK%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29K%5E%7BT%7D" alt="[公式]"> ——–(14)</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3DP_%7Bk%7D%5E%7B-%7D-KHP_%7Bk%7D%5E%7B-%7D-P_%7Bk%7D%5E%7B-%7DH%5E%7BT%7DK%5E%7BT%7D%2BK%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29K%5E%7BT%7D" alt="[公式]"> ————(14)</p>
 <h2 id="3-2-状态变量"><a href="#3-2-状态变量" class="headerlink" title="3.2 状态变量"></a>3.2 状态变量</h2><p>卡尔曼滤波的估计原则就是使最优状态估计的协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D" alt="[公式]"> 最小，使其越来越逼近于真实值。因此，其<strong>目标函数为：</strong></p>
-<p><img src="https://www.zhihu.com/equation?tex=J%3D%5Csum_%7Bmin%7D%7BP_%7Bk%7D%7D" alt="[公式]"> ———————–(15)</p>
+<p><img src="https://www.zhihu.com/equation?tex=J%3D%5Csum_%7Bmin%7D%7BP_%7Bk%7D%7D" alt="[公式]"> ———————————-(15)</p>
 <p>对卡尔曼增益矩阵<img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 求偏导，不难可知：</p>
-<p><img src="https://www.zhihu.com/equation?tex=%5Cfrac%7B%5Cpartial+%7BP_%7Bk%7D%7D%7D%7B%5Cpartial+%7BK%7D%7D%3D-2%28P_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%29%2B2K%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29%3D0" alt="[公式]">)—-(16)</p>
-<p>由此可知最优估计条件下的卡尔曼增益矩阵 <img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 为—–<strong>黄金三条</strong></p>
-<p><img src="https://www.zhihu.com/equation?tex=K%3DP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29%5E%7B-1%7D" alt="[公式]">)—-(17)  </p>
-<p>联立式(11)(14)即可知道估计误差方差阵为———–<strong>黄金四条</strong></p>
-<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3D%28I-KH%29%2AP_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ———-(18)</p>
+<p><img src="https://www.zhihu.com/equation?tex=%5Cfrac%7B%5Cpartial+%7BP_%7Bk%7D%7D%7D%7B%5Cpartial+%7BK%7D%7D%3D-2%28P_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%29%2B2K%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29%3D0" alt="[公式]">——(16)</p>
+<p>由此可知最优估计条件下的卡尔曼增益矩阵 <img src="https://www.zhihu.com/equation?tex=K" alt="[公式]"> 为——-<strong>黄金三条</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=K%3DP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%28HP_%7Bk%7D%5E%7B-%7DH%5E%7BT%7D%2BR%29%5E%7B-1%7D" alt="[公式]">——(17)  </p>
+<p>联立式(11)(14)即可知道估计误差方差阵为—————-<strong>黄金四条</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%3D%28I-KH%29%2AP_%7Bk%7D%5E%7B-%7D" alt="[公式]"> —————(18)</p>
 <p>黄金5条的最后一条的状态估计协方差 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%7D%5E%7B-%7D" alt="[公式]"> ，由式（5）可知：</p>
 <p><img src="https://www.zhihu.com/equation?tex=e_%7Bk%2B1%7D%5E%7B-%7D+%3D+x_%7Bk%2B1%7D-%5Ctilde%7Bx%7D_%7Bk%2B1%7D%5E%7B-%7D++++++++++++++++++++%3D%28A%2Ax_%7Bk%7D%2BBu_%7Bk%7D%2Bw_%7Bk%7D%29-%28A%2A%5Ctilde%7Bx%7D_%7Bk%7D%2BBu_%7Bk%7D%29" alt="[公式]"> </p>
 <p>化简可知： <img src="https://www.zhihu.com/equation?tex=e_%7Bk%2B1%7D%5E%7B-%7D%3DA%28x_%7Bk%7D-%5Ctilde%7Bx%7D_%7Bk%7D%29%2Bw_%7Bk%7D%3DAe_%7Bk%7D%2Bw_%7Bk%7D" alt="[公式]"> </p>
 <p>由式（7）可知：</p>
-<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D+%3DE%5B+e_%7Bk%2B1%7D%5E%7B-%7D%2Ae_%7Bk%2B1%7D%5E%7B-%7D%7B%7D%5E%7BT%7D%5D%3DE%5B%28Ae_%7Bk%7D%2Bw_%7Bk%7D%29%28Ae_%7Bk%7D%2Bw_%7Bk%7D%29%5E%7BT%7D%5D" alt="[公式]"> —–(19)</p>
-<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D%3DE%5B%28Ae_%7Bk%7D%29%28Ae_%7Bk%7D%29%5E%7BT%7D%5D%2BE%5Bw_%7Bk%7D%28w_%7Bk%7D%29%5E%7BT%7D%5D" alt="[公式]"> ——————–(20)</p>
-<p>由式（20）不难得知，预测协方差矩阵 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D" alt="[公式]"> 为：—<strong>黄金5条</strong></p>
-<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D%3DAP_%7Bk%7DA%5E%7BT%7D%2BQ" alt="[公式]"> ———–(21)</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D+%3DE%5B+e_%7Bk%2B1%7D%5E%7B-%7D%2Ae_%7Bk%2B1%7D%5E%7B-%7D%7B%7D%5E%7BT%7D%5D%3DE%5B%28Ae_%7Bk%7D%2Bw_%7Bk%7D%29%28Ae_%7Bk%7D%2Bw_%7Bk%7D%29%5E%7BT%7D%5D" alt="[公式]"> ——-(19)</p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D%3DE%5B%28Ae_%7Bk%7D%29%28Ae_%7Bk%7D%29%5E%7BT%7D%5D%2BE%5Bw_%7Bk%7D%28w_%7Bk%7D%29%5E%7BT%7D%5D" alt="[公式]"> ——————————(20)</p>
+<p>由式（20）不难得知，预测协方差矩阵 <img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D" alt="[公式]"> 为：—-<strong>黄金5条</strong></p>
+<p><img src="https://www.zhihu.com/equation?tex=P_%7Bk%2B1%7D%5E%7B-%7D%3DAP_%7Bk%7DA%5E%7BT%7D%2BQ" alt="[公式]"> —————-(21)</p>
 <p>至此，卡尔曼滤波的黄金5条全部推导完成，其“状态预测”与“状态更新”过程如下图所示。</p>
 <p><img src="https://pic4.zhimg.com/v2-32b046b882950eac20eda2c502f4e005_b.jpg" alt="img"></p>
 <h2 id="四、小结"><a href="#四、小结" class="headerlink" title="四、小结"></a><strong>四、小结</strong></h2><p>卡尔曼滤波作为一种状态最优估计算法，与《现代控制系统》中的<strong>观测器设计</strong>思维类似，都是利用观测量并结合系统的模型来对系统的状态进行估计。但二者又有不同，由前面的介绍可知卡尔曼滤波的目的是利用卡尔曼增益来修正状态预测值，而观测器设计的目的是当系统的有些状态信息无法有效获取或不易测得时，通过状态重构，以便实现反馈控制。</p>
@@ -491,7 +490,7 @@
 
       <!--noindex-->
       <div class="post-toc-wrap sidebar-panel">
-          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、背景—卡尔曼滤波的意义"><span class="nav-number">1.</span> <span class="nav-text">一、背景—卡尔曼滤波的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、卡尔曼滤波的基本模型"><span class="nav-number">2.</span> <span class="nav-text">二、卡尔曼滤波的基本模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Kalman-Filter的公式推导"><span class="nav-number">3.</span> <span class="nav-text">三、Kalman Filter的公式推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-状态估计协方差"><span class="nav-number">4.</span> <span class="nav-text">3.1 状态估计协方差 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-状态变量"><span class="nav-number">5.</span> <span class="nav-text">3.2 状态变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、小结"><span class="nav-number">6.</span> <span class="nav-text">四、小结</span></a></li></ol></div>
+          <div class="post-toc motion-element"><ol class="nav"><li class="nav-item nav-level-2"><a class="nav-link" href="#一、背景—-卡尔曼滤波的意义"><span class="nav-number">1.</span> <span class="nav-text">一、背景—-卡尔曼滤波的意义</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#二、卡尔曼滤波的基本模型"><span class="nav-number">2.</span> <span class="nav-text">二、卡尔曼滤波的基本模型</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#三、Kalman-Filter的公式推导"><span class="nav-number">3.</span> <span class="nav-text">三、Kalman Filter的公式推导</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-1-状态估计协方差"><span class="nav-number">4.</span> <span class="nav-text">3.1 状态估计协方差 </span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#3-2-状态变量"><span class="nav-number">5.</span> <span class="nav-text">3.2 状态变量</span></a></li><li class="nav-item nav-level-2"><a class="nav-link" href="#四、小结"><span class="nav-number">6.</span> <span class="nav-text">四、小结</span></a></li></ol></div>
       </div>
       <!--/noindex-->
 
@@ -622,6 +621,8 @@
 
 
 
+
+  
 
   
 
